@@ -1,0 +1,10 @@
+heat_template_version: 2015-04-30
+
+description: Single instance hot template
+
+resources:
+  instance_1:
+    type: OS::Nova::Server
+    properties:
+      image: cirros
+      flavor: os.small
