@@ -1,6 +1,7 @@
 heat_template_version: 2015-04-30
 
-description: simple stack with instance and private network
+description: >
+  Tests openstack by creating VM, private network, and attaches 1G volume. Need cirros image, define flavor explicitly, else uses os.small.
 
 parameters:
 
@@ -24,7 +25,7 @@ resources:
     properties:
       network_id: { get_resource: private_net }
       cidr: 192.168.254.0/24
-      gateway_ip: 192.168.254.254 
+      gateway_ip: 192.168.254.1
 
   default_secgroup:
     type: OS::Neutron::SecurityGroup
