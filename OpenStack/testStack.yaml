@@ -8,6 +8,10 @@ parameters:
     type: string
     default: cirros
 
+  flavor:
+    type: string
+    default: os.small
+
 resources:
 
   private_net:
@@ -22,7 +26,7 @@ resources:
       cidr: 192.168.254.0/24
       gateway_ip: 192.168.254.254 
 
-  def_secgroup:
+  default_secgroup:
     type: OS::Neutron::SecurityGroup
     properties:
       rules:
@@ -33,18 +37,18 @@ resources:
         - protocol: icmp
           remote_ip_prefix: 0.0.0.0/0
 
-  instance_1_port:
+  testInstance_port:
     type: OS::Neutron::Port
     properties:
       security_groups:
-        - { get_resource: def_secgroup }
+        - { get_resource: default_secgroup }
       network: { get_resource: private_net }
 
-  instance_1:
+  testInstance:
     type: OS::Nova::Server
     properties:
       image: { get_param: image } 
       networks:
-        - port: { get_resource: instance_1_port }
-      flavor: os.small
+        - port: { get_resource: testInstance_port }
+      flavor: { get_param: flavor }
 
