@@ -37,6 +37,19 @@ resources:
         - protocol: icmp
           remote_ip_prefix: 0.0.0.0/0
 
+  testVolume:
+    type: OS::Cinder::Volume
+    properties:
+      name: "testVolume"
+      size: 1
+
+  attach_test_volume:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: testVolume }
+      instance_uuid: { get_resource: testInstance }
+      mountpoint: /dev/vdb
+      
   testInstance_port:
     type: OS::Neutron::Port
     properties:
@@ -51,4 +64,5 @@ resources:
       networks:
         - port: { get_resource: testInstance_port }
       flavor: { get_param: flavor }
+
 
