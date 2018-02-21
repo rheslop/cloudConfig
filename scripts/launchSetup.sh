@@ -1,7 +1,7 @@
 # Get Cirros
 
 if [ ! -f cirros-0.3.5-x86_64-disk.img ]; then
-  curl -O http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
+  curl -O http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img || exit 1
 fi
 
 openstack image create --disk-format qcow2 --container-format bare --file cirros-0.3.5-x86_64-disk.img cirros
