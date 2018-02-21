@@ -1,5 +1,6 @@
-# Get Cirros
+cd /home/stack && source /home/stack/overcloudrc
 
+# Get Cirros
 if [ ! -f cirros-0.3.5-x86_64-disk.img ]; then
   curl -O http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img || exit 1
 fi
@@ -13,9 +14,12 @@ openstack flavor create --ram 2048 --disk 20 --vcpus 2 --id auto os.small
 openstack flavor create --ram 4096 --disk 40 --vcpus 2 --id auto os.medium
 openstack flavor create --ram 8192 --disk 80 --vcpus 4 --id auto os.large
 
-### Create Network
+### Create Network and subnet
 
-openstack network create test
-openstack subnet create test --network test --subnet-range 192.168.0.0/24
+NETID=$(openstack network create private_net | awk '/\| id/ {print $4}')
+
+openstack subnet create private_subnet --network private_net --subnet-range 192.168.254.0/24
 
 #### Create VM
+
+nova boot  --image cirros --flavor os.micro --nic net-id=$NETID
