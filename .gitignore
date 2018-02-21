@@ -1,1 +1,4 @@
 AWS/*
+ansible/*retry
+ansible/roles/rhosp-11-director/vars/locked-vars.yml
+

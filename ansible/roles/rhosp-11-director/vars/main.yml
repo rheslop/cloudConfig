@@ -1,0 +1,20 @@
+shortname: director
+domainname: rumourmill.local
+ip_address: 10.102.0.13
+stackhome: /home/stack
+
+# Define the names of the source files that will be used to create
+# to the destination system files instackenv.json and undercloud.conf
+# respectively. If the role will be used on multiple sites then
+# site names are encouraged. For example:
+#
+# instackenv-[SITE-NAME].sh
+# undercloud-[SITE-NAME].conf
+
+# instackenv_sh: instackenv-director.sh
+undercloud_conf: undercloud-director.conf
+
+# Alternatively instackenv.json can be copied via template
+
+instackenv_json: instackenv-director.json
+reg_script: addRepos_osp11.sh
