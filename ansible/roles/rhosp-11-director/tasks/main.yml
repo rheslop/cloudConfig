@@ -22,13 +22,13 @@
     group: stack
     createhome: yes
     move_home: yes
-    home: "{{ stackhome }}"
+    home: /home/stack
     password: "{{ stack_pass }}"
     state: present
 
 - name: creat images directory
   file:
-    path: "{{ stackhome }}/images"
+    path: /home/stack/images
     state: directory
     owner: stack
     group: stack
@@ -37,7 +37,7 @@
 
 - name: create templates directory
   file:
-    path: "{{ stackhome }}/templates"
+    path: /home/stack/templates
     state: directory
     owner: stack
     group: stack
@@ -55,6 +55,13 @@
 - name: Configure hostname
   hostname:
     name: "{{ shortname }}.{{ domainname }}"
+
+- name: Configure /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: "{{ shortname }}"
+    state: present
+    line: "{{ ansible_default_ipv4 }}  {{ shortname }}  {{ shortname }}.{{ domainname }}"
 
 - name: Rebooting node
   shell: sleep 3 && /sbin/reboot
@@ -86,7 +93,7 @@
 - name: Copying undercloud.conf
   copy:
     src: "{{ undercloud_conf }}"
-    dest: "{{ stackhome }}/undercloud.conf"
+    dest: /home/stack/undercloud.conf
     owner: stack
     group: stack
 
@@ -108,7 +115,7 @@
   unarchive:
     remote_src: yes
     src: "{{ item }}"
-    dest: "{{ stackhome }}/images"
+    dest: /home/stack/images
     creates: overcloud-full.qcow2
   become: yes
   become_user: stack
@@ -140,7 +147,7 @@
 - name: Running instackenv.sh
   script: "../files/{{ instackenv_sh }}"
   args:
-    creates: "{{ stackhome }}/instackenv.json"
+    creates: /home/stack/instackenv.json
   become: yes
   become_user: stack
 

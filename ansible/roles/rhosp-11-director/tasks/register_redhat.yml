@@ -1,0 +1,10 @@
+- name: Registering to Red Hat                         
+  redhat_subscription:     
+    state: present         
+    username: "{{ rhn_username }}"                     
+    password: "{{ rhn_password }}"                     
+    pool: "{{ redhat_pool }}"                          
+    autosubscribe: no      
+
+- name: Adjust repos       
+  script: ../files/addRepos-11.sh
