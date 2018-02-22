@@ -1,0 +1,6 @@
+- name: Install Director
+  hosts: undercloud
+  remote_user: root
+  
+  roles:
+  - rhosp-11-director

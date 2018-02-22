@@ -11,10 +11,10 @@ stackhome: /home/stack
 # instackenv-[SITE-NAME].sh
 # undercloud-[SITE-NAME].conf
 
-# instackenv_sh: instackenv-director.sh
-undercloud_conf: undercloud-director.conf
+instackenv_sh: instackenv-servermain.sh
+undercloud_conf: undercloud-servermain.conf
 
 # Alternatively instackenv.json can be copied via template
 
-instackenv_json: instackenv-director.json
+# instackenv_json: instackenv-servermain.json
 reg_script: addRepos_osp11.sh
