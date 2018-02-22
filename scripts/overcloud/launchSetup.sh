@@ -22,4 +22,4 @@ openstack subnet create private_subnet --network private_net --subnet-range 192.
 
 #### Create VM
 
-nova boot  --image cirros --flavor os.micro --nic net-id=$NETID
+nova boot --image cirros --flavor os.micro --nic net-id=$NETID test-instance0
