@@ -1,0 +1,94 @@
+- name: Restarting nova services on controllers
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - openstack-nova-api
+    - openstack-nova-conductor
+    - openstack-nova-consoleauth
+    - openstack-nova-novncproxy
+    - openstack-nova-scheduler
+  when: inventory_hostname in groups["controllers"]
+  listen: restart nova
+
+- name: Restarting nova service on compute nodes
+  service:
+    name: openstack-nova-compute
+    state: restarted
+  when: inventory_hostname in groups["computes"]
+  listen: restart nova
+
+- name: Restarting neutron services on controllers
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - neutron-dhcp-agent
+    - neutron-l3-agent
+    - neutron-metadata-agent
+    - neutron-openvswitch-agent
+    - neutron-ovs-cleanup
+    - neutron-server
+  when: inventory_hostname in groups["controllers"]
+  listen: restart neutron
+
+- name: Restarting neutron services on computes
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - neutron-openvswitch-agent
+    - neutron-ovs-cleanup
+  when: inventory_hostname in groups["computes"]
+  listen: restart neutron
+
+- name: restart glance
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - openstack-glance-api
+    - openstack-glance-registry
+  when: inventory_hostname in groups["controllers"]
+
+- name: restart cinder
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - openstack-cinder-api
+    - openstack-cinder-backup
+    - openstack-cinder-scheduler
+    - openstack-cinder-volume
+  when: inventory_hostname in groups["controllers"]
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+  when: inventory_hostname in groups["controllers"]
+
+- name: restart ceilometer
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - openstack-ceilometer-central
+    - openstack-ceilometer-collector
+    - openstack-ceilometer-notification
+  when: inventory_hostname in groups["controllers"]
+
+- name: restart aodh
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - openstack-aodh-evaluator
+    - openstack-aodh-listener
+    - openstack-aodh-notifier
+
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+

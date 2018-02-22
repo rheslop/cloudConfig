@@ -1,221 +1,112 @@
-- name: Apply logging
-  hosts: all
-  remote_user: heat-admin
-  become: yes
-  become_method: sudo
-  vars:
-    logging_directive: '*.*     @@10.0.0.1:514'
+- name: Enabling syslog - nova,neutron
+  ini_file:
+    dest: "{{ item }}"
+    section: DEFAULT
+    state: present
+    option: use_syslog
+    value: true
+  with_items:
+    - /etc/nova/nova.conf
+    - /etc/neutron/neutron.conf
+
+- name: Setting syslog facility - nova
+  ini_file:
+    dest: /etc/nova/nova.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL0
+  notify: restart nova
+
+- name: Setting syslog facility - neutron
+  ini_file:
+    dest: /etc/neutron/neutron.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL1
+  notify: restart neutron
+
+- name: Enabling syslog - controllers,
+  ini_file:
+    dest: "{{ item }}"
+    section: DEFAULT
+    state: present
+    option: use_syslog
+    value: true
+  with_items:
+    - /etc/glance/glance-api.conf
+    - /etc/glance/glance-registry.conf
+    - /etc/cinder/cinder.conf
+    - /etc/keystone/keystone.conf
+    - /etc/ceilometer/ceilometer.conf
+    - /etc/aodh/aodh.conf
+  when: inventory_hostname in groups["controllers"]
     
-  tasks:
+- name: Setting syslog facility - glance api
+  ini_file: 
+    dest: /etc/neutron/neutron.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL2
+  when: inventory_hostname in groups["controllers"]
+  notify: restart glance
 
-  - name: Enabling syslog - nova,neutron
-    ini_file:
-      dest: "{{ item }}"
-      section: DEFAULT
-      state: present
-      option: use_syslog
-      value: true
-    with_items:
-      - /etc/nova/nova.conf
-      - /etc/neutron/neutron.conf
-    when: inventory_hostname in groups["OSP"]
-  
-  - name: Setting syslog facility - nova
-    ini_file:
-      dest: /etc/nova/nova.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL0
-    when: inventory_hostname in groups["OSP"]
-    notify: restart nova
-  
-  - name: Setting syslog facility - neutron
-    ini_file:
-      dest: /etc/neutron/neutron.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL1
-    when: inventory_hostname in groups["OSP"]
-    notify: restart neutron
-  
-  - name: Enabling syslog - glance,
-    ini_file:
-      dest: "{{ item }}"
-      section: DEFAULT
-      state: present
-      option: use_syslog
-      value: true
-    with_items:
-      - /etc/glance/glance-api.conf
-      - /etc/glance/glance-registry.conf
-      - /etc/cinder/cinder.conf
-      - /etc/keystone/keystone.conf
-      - /etc/ceilometer/ceilometer.conf
-      - /etc/aodh/aodh.conf
-    when: inventory_hostname in groups["controllers"]
-      
-  - name: Setting syslog facility - glance api
-    ini_file: 
-      dest: /etc/neutron/neutron.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL2
-    when: inventory_hostname in groups["controllers"]
-    notify: restart glance
-  
-  - name: Setting syslog facility - glance registry
-    ini_file:
-      dest: /etc/glance/glance-registry.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL3
-    when: inventory_hostname in groups["controllers"]
-    notify: restart glance
-  
-  - name: Setting syslog facility - Cinder
-    ini_file:
-      dest: /etc/cinder/cinder.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL4
-    when: inventory_hostname in groups["controllers"]
-    notify: restart cinder
-  
-  - name: Setting syslog facility - Keystone
-    ini_file:
-      dest: /etc/keystone/keystone.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL5
-    when: inventory_hostname in groups["controllers"]
-    notify: restart httpd
-  
-  - name: Setting syslog facility - Ceilometer
-    ini_file:
-      dest: /etc/ceilometer/ceilometer.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL6
-    when: inventory_hostname in groups["controllers"]
-    notify: restart ceilometer
-  
-  - name: Setting syslog facility
-    ini_file:
-      dest: /etc/aodh/aodh.conf
-      section: DEFAULT
-      state: present
-      option: syslog_log_facility
-      value: LOG_LOCAL7
-    when: inventory_hostname in groups["controllers"]
-  
-  - name: copy client logging configuration
-    copy:
-      content: "{{ logging_directive }}"
-      dest: /etc/rsyslog.d/client.conf
-      owner: root
-      group: root
-      mode: 0664
-    notify: restart rsyslog
+- name: Setting syslog facility - glance registry
+  ini_file:
+    dest: /etc/glance/glance-registry.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL3
+  when: inventory_hostname in groups["controllers"]
+  notify: restart glance
 
-  handlers:
-  - name: Restarting nova services on controllers
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - openstack-nova-api
-      - openstack-nova-conductor
-      - openstack-nova-consoleauth
-      - openstack-nova-novncproxy
-      - openstack-nova-scheduler
-    when: inventory_hostname in groups["controllers"]
-    listen: restart nova
-  
-  - name: Restarting nova service on compute nodes
-    service:
-      name: openstack-nova-compute
-      state: restarted
-    when: inventory_hostname in groups["computes"]
-    listen: restart nova
-  
-  - name: Restarting neutron services on controllers
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - neutron-dhcp-agent
-      - neutron-l3-agent
-      - neutron-metadata-agent
-      - neutron-openvswitch-agent
-      - neutron-ovs-cleanup
-      - neutron-server
-    when: inventory_hostname in groups["controllers"]
-    listen: restart neutron
-  
-  - name: Restarting neutron services on computes
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - neutron-openvswitch-agent
-      - neutron-ovs-cleanup
-    when: inventory_hostname in groups["computes"]
-    listen: restart neutron
-  
-  - name: restart glance
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - openstack-glance-api
-      - openstack-glance-registry
-    when: inventory_hostname in groups["controllers"]
-  
-  - name: restart cinder
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - openstack-cinder-api
-      - openstack-cinder-backup
-      - openstack-cinder-scheduler
-      - openstack-cinder-volume
-    when: inventory_hostname in groups["controllers"]
-  
-  - name: restart httpd
-    service:
-      name: httpd
-      state: restarted
-    when: inventory_hostname in groups["controllers"]
-  
-  - name: restart ceilometer
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - openstack-ceilometer-central
-      - openstack-ceilometer-collector
-      - openstack-ceilometer-notification
-    when: inventory_hostname in groups["controllers"]
-  
-  - name: restart aodh
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - openstack-aodh-evaluator
-      - openstack-aodh-listener
-      - openstack-aodh-notifier
-  
-  - name: restart rsyslog
-    service:
-      name: rsyslog
-      state: restarted
-  
+- name: Setting syslog facility - Cinder
+  ini_file:
+    dest: /etc/cinder/cinder.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL4
+  when: inventory_hostname in groups["controllers"]
+  notify: restart cinder
+
+- name: Setting syslog facility - Keystone
+  ini_file:
+    dest: /etc/keystone/keystone.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL5
+  when: inventory_hostname in groups["controllers"]
+  notify: restart httpd
+
+- name: Setting syslog facility - Ceilometer
+  ini_file:
+    dest: /etc/ceilometer/ceilometer.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL6
+  when: inventory_hostname in groups["controllers"]
+  notify: restart ceilometer
+
+- name: Setting syslog facility
+  ini_file:
+    dest: /etc/aodh/aodh.conf
+    section: DEFAULT
+    state: present
+    option: syslog_log_facility
+    value: LOG_LOCAL7
+  when: inventory_hostname in groups["controllers"]
+
+- name: copy client logging configuration
+  copy:
+    content: "*.* @{{ log_server }}:514\n"
+    dest: /etc/rsyslog.d/client.conf
+    owner: root
+    group: root
+    mode: 0664
+  notify: restart rsyslog
