@@ -18,6 +18,7 @@ WRITE_TEMPLATES
 }
 
 function WRITE_OPENSSL {
+echo "" # stdout buffer start
 cat > $OPENSSL_WORKING_DIR/openssl.cnf << EOF
 HOME                    = .
 RANDFILE                = \$ENV::HOME/.rnd
@@ -195,9 +196,19 @@ IP.1 = $TARGET_IPADDR
 DNS.1 = $TARGET_FQDN
 
 EOF
+
+if [ $? == 0 ]; then
+    echo "${OPENSSL_WORKING_DIR}/openssl.cnf written."
+else
+    echo "Failed writing ${OPENSSL_WORKING_DIR}/openssl.cnf - halting."
+fi
+
+echo "" # stdout buffer end
 }
 
 function GENERATE_CERTIFICATES {
+
+    echo "" # stdout buffer start
     rpm -q openssl > /dev/null || sudo yum -y install openssl
     rpm -q openssl > /dev/null || exit 1
 
@@ -216,31 +227,56 @@ function GENERATE_CERTIFICATES {
     fi
 
     if [ ! -f $OPENSSL_WORKING_DIR/ca.key.pem ]; then
+        echo "Generating Certificat Authority private key."
         openssl genrsa -out $OPENSSL_WORKING_DIR/ca.key.pem
+    else
+        echo "Certificate Authority private key present...skipping."
     fi
 
     if [ ! -f $OPENSSL_WORKING_DIR/ca.crt.pem ]; then
+        echo "Generating root CA."
         openssl req -key $OPENSSL_WORKING_DIR/ca.key.pem -new -x509 -days 3650 -extensions v3_ca -out $OPENSSL_WORKING_DIR/ca.crt.pem -subj "/C=$COUNTRY_NAME/ST=$STATE/L=$LOCALITY/O=$ORGANIZATION/CN=$TARGET_FQDN"
+    else
+        echo "Root CA present...skipping."
     fi
 
+    echo "Updating /etc/pki/ca-trust/anchors/"
     sudo cp $OPENSSL_WORKING_DIR/ca.crt.pem /etc/pki/ca-trust/source/anchors/
     sudo update-ca-trust extract
 
     if [ ! -f $OPENSSL_WORKING_DIR/server.key.pem ]; then
+        echo "Creating server private key."
         openssl genrsa -out $OPENSSL_WORKING_DIR/server.key.pem 2048
+    else
+        echo "Server private key present...skipping."
     fi
 
     if [ ! -f $OPENSSL_WORKING_DIR/server.csr.pem ]; then
+        echo "Generating certificate signing request."
         openssl req -config $OPENSSL_WORKING_DIR/openssl.cnf -key $OPENSSL_WORKING_DIR/server.key.pem -new -out $OPENSSL_WORKING_DIR/server.csr.pem -subj "/C=$COUNTRY_NAME/ST=$STATE/L=$LOCALITY/O=$ORGANIZATION/CN=$TARGET_FQDN"
+    else
+        echo "Certificate signing request present...skipping."
     fi
 
     if [ ! -f $OPENSSL_WORKING_DIR/server.crt.pem ]; then
+        echo "Creating signed certificate."
         sudo openssl ca -batch -config $OPENSSL_WORKING_DIR/openssl.cnf -extensions v3_req -days 3650 -in $OPENSSL_WORKING_DIR/server.csr.pem -out $OPENSSL_WORKING_DIR/server.crt.pem -cert $OPENSSL_WORKING_DIR/ca.crt.pem -keyfile $OPENSSL_WORKING_DIR/ca.key.pem
+    else
+        echo "Server certificate present...skipping."
     fi
+    echo "" # stdout buffer end
 
 }
 
 function WRITE_TEMPLATES {
+
+echo "" # stdout buffer start
+echo "Writing ${TEMPLATES_DIR}/environments/enable-tls.yaml."
+
+if [ ! -d ${TEMPLATES_DIR}/environments ]; then
+    echo "${TEMPLATES_DIR}/environments not present...creating." 
+    mkdir -p ${TEMPLATES_DIR}/environments
+fi
 
 cat > ${TEMPLATES_DIR}/environments/enable-tls.yaml << EOF
 parameter_defaults:
@@ -273,6 +309,8 @@ resource_registry:
   OS::TripleO::NodeTLSData: /usr/share/openstack-tripleo-heat-templates/puppet/extraconfig/tls/tls-cert-inject.yaml
 EOF
 
+echo "Writing ${TEMPLATES_DIR}/environments/inject-trust-anchor.yaml."
+
 cat > ${TEMPLATES_DIR}/environments/inject-trust-anchor.yaml << EOF
 parameter_defaults:
   SSLRootCertificate: |
@@ -291,6 +329,7 @@ resource_registry:
   OS::TripleO::NodeTLSCAData: /usr/share/openstack-tripleo-heat-templates/puppet/extraconfig/tls/ca-inject.yaml
 EOF
 
+echo "" # stdout end buffer
 }
 
 AUTO_OPENSSL
