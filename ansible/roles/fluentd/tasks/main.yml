@@ -1,0 +1,45 @@
+- name: Copying fluentd yum repo file
+  copy:
+    src: fluentd.repo
+    dest: /etc/yum.repos.d/fluentd.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Importing fluentd GPG key
+  rpm_key: 
+    key: https://packages.treasuredata.com/GPG-KEY-td-agent
+    state: present
+
+
+- name: Installing fluentd
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - ruby
+    - td-agent
+
+- name: Configuring fluentd
+  copy:
+    src: files/td-agent.conf
+    dest: /etc/td-agent/td-agent.conf
+    mode: 0644
+    owner: root
+    group: root
+    setype: etc_t
+
+- name: Install fluentd elasticsearch plugin
+  gem:
+    name: fluent-plugin-elasticsearch
+    state: latest
+    include_dependencies: yes
+    executable: /usr/sbin/td-agent-gem
+
+
+- name: Starting fluentd
+  service:
+    name: td-agent
+    state: started
+    enabled: yes
+

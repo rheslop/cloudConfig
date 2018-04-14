@@ -1,0 +1,25 @@
+- name: Install EFK stack
+  hosts: fed
+
+  pre_tasks:              
+
+  - name: Installing software
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - libselinux-python
+      - libsemanage-python
+
+  roles:
+    - elasticsearch
+    - fluentd
+    - kibana
+
+- name: Installs fluentbit                          
+  hosts: rhel-1 
+  remote_user: cloud-user
+  become: yes             
+
+  roles:                  
+    - td-agent-bit

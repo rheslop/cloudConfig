@@ -1,0 +1,37 @@
+- name: Installing elasticsearch RPM key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Configuring elasticsearch repository
+  yum_repository:
+    name: elasticsearch-6.x
+    description: Elasticsearch repository for 6.x packages
+    baseurl: https://artifacts.elastic.co/packages/6.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+
+- name: Installing elasticsearch
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - java-1.8.0-openjdk
+    - elasticsearch
+
+- name: Configuring /etc/elasticsearch/elasticsearch.yml
+  lineinfile:
+    path: /etc/elasticsearch/elasticsearch.yml
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - 'http.cors.enabled: true'
+    - 'http.cors.allow-origin: "/.*/"'
+
+- name: Starting elasticsearch
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes
+    

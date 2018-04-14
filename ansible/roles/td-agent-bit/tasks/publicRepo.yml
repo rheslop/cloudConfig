@@ -1,0 +1,10 @@
+- name: Configuring repository
+  yum_repository:
+    name: td-agent-bit
+    description: TD Agent Bit
+    state: present
+    baseurl: http://packages.fluentbit.io/centos/7
+    gpgcheck: yes
+    gpgkey: http://packages.fluentbit.io/fluentbit.key
+    enabled: yes
+

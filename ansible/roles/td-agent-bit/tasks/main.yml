@@ -1,0 +1,22 @@
+- include: "{{ repo }}"
+
+- name: Installing td-agent-bit
+  package:
+    name: td-agent-bit
+    state: present
+
+- name: start agent       
+  service:                
+    name: td-agent-bit    
+    enabled: yes          
+    state: started 
+
+- name: Configuring td-agent-bit
+  template:
+    src: td-agent-bit.conf.j2
+    dest: /etc/td-agent-bit/td-agent-bit.conf
+    mode: 0644
+    owner: root
+    group: root
+    setype: etc_t
+  notify: restart agent

@@ -1,0 +1,5 @@
+[treasuredata]
+name=TreasureData
+baseurl=http://packages.treasuredata.com/3/redhat/7/x86_64
+gpgcheck=1
+gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent

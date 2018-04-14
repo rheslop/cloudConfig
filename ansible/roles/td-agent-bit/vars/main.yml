@@ -1,0 +1,4 @@
+repo: publicRepo.yml
+server_1: fedora-EFK.default.local
+# server_2:
+# server_3:

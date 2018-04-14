@@ -1,0 +1,56 @@
+- name: Installing elasticsearch RPM key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Configuring elasticsearch repository
+  yum_repository:
+    name: Kibana-6.x
+    description: Kibana repository for 6.x packages
+    baseurl: https://artifacts.elastic.co/packages/6.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+
+- name: Installing Kibana
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - kibana
+    - httpd
+
+- name: Configuring Kibana
+  copy:
+    src: files/kibana3.conf
+    dest: /etc/httpd/conf.d/kibana3.conf
+    mode: 0644
+    owner: root
+    group: root
+    setype: httpd_config_t
+
+- name: Setting httpd_can_network_connect to 1
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+
+#- name: Setting global default dashboard
+#  copy:
+#    remote_src: yes
+#    src: /usr/share/kibana/app/dashboards/logstash.json
+#    dest: /usr/share/kibana/app/dashboards/default.json
+#    backup: yes
+#    owner: root
+#    group: root
+#    mode: 644
+#    setype: usr_t
+
+- name: Starting Kibana
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - httpd
+    - kibana
