@@ -4,7 +4,7 @@
 
 - name: Registering Red Hat system
   include_tasks: register_redhat.yml
-  when: ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'Red Hat Enterprise Linux
 
 - name: Running extra tasks
   include_tasks: extras.yml
@@ -124,8 +124,8 @@
   become: yes
   become_user: stack
   with_items:
-    - /usr/share/rhosp-director-images/overcloud-full-latest-11.0.tar
-    - /usr/share/rhosp-director-images/ironic-python-agent-latest-11.0.tar
+    - /usr/share/rhosp-director-images/overcloud-full-latest-10.0.tar
+    - /usr/share/rhosp-director-images/ironic-python-agent-latest-10.0.tar
 
 - name: Uploading images to glance
   shell: ". /home/stack/stackrc && openstack overcloud image upload --image-path /home/stack/images/"
@@ -156,7 +156,7 @@
   become_user: stack
 
 - name: Importing ironic nodes
-  shell: ". /home/stack/stackrc && openstack overcloud node import --json /home/stack/instackenv.json"
+  shell: "source /home/stack/stackrc && openstack baremetal import --json /home/stack/instackenv.json"
   become: yes
   become_user: stack
 
