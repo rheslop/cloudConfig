@@ -1,0 +1,10 @@
+- name: Register public key
+  shell: cat /home/stack/.ssh/id_rsa.pub
+  register: authorized_key
+
+- name: Allows passwordless ssh to local hypervisor
+  authorized_key:
+    user: undercloud
+    state: present
+    key: "{{ authorized_key.stdout }}"
+  delegate_to: localhost

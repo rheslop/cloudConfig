@@ -1,4 +1,0 @@
----                        
-
-- name: Configuring eth0   
-  script: files/ifcfg-eth0.sh

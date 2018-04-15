@@ -2,12 +2,8 @@
   include_vars:
     file: locked-vars.yml
 
-- name: Registering Red Hat system
-  include_tasks: register_redhat.yml
-  when: ansible_distribution == 'Red Hat Enterprise Linux
-
-- name: Running extra tasks
-  include_tasks: extras.yml
+- name: Running preconfiguration tasks
+  include_tasks: pre-configuration.yml
 
 - name: Update the undercloud
   yum:
@@ -154,6 +150,9 @@
     creates: /home/stack/instackenv.json
   become: yes
   become_user: stack
+
+- name: Running postconfiguration tasks
+  include_tasks: post-configuration.yml
 
 - name: Importing ironic nodes
   shell: "source /home/stack/stackrc && openstack baremetal import --json /home/stack/instackenv.json"
