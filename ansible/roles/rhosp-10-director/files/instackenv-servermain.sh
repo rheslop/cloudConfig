@@ -14,7 +14,7 @@ jq . << EOF > ~/instackenv.json
       "pm_type": "pxe_ssh",
       "pm_addr": "192.168.0.84",
       "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)"
+      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:controller-0,boot_option:local"
     },
     {
@@ -26,7 +26,7 @@ jq . << EOF > ~/instackenv.json
       "pm_type": "pxe_ssh",
       "pm_addr": "192.168.0.84",
       "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)"
+      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:controller-1,boot_option:local"
     },
     {
@@ -38,7 +38,7 @@ jq . << EOF > ~/instackenv.json
       "pm_type": "pxe_ssh",
       "pm_addr": "192.168.0.84",
       "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)"
+      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:controller-2,boot_option:local"
     },
     {
@@ -50,7 +50,7 @@ jq . << EOF > ~/instackenv.json
       "pm_type": "pxe_ssh",
       "pm_addr": "192.168.0.84",
       "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)"
+      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:compute-0,boot_option:local"
     },
     {
@@ -62,7 +62,7 @@ jq . << EOF > ~/instackenv.json
       "pm_type": "pxe_ssh",
       "pm_addr": "192.168.0.84",
       "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)"
+      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:compute-1,boot_option:local"
     },
     {
@@ -74,7 +74,7 @@ jq . << EOF > ~/instackenv.json
       "pm_type": "pxe_ssh",
       "pm_addr": "192.168.0.84",
       "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)"
+      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:compute-2,boot_option:local"
     }
   ]
