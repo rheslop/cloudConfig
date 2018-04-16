@@ -5,11 +5,11 @@
     password: "{{ rhn_password }}"                     
     pool: "{{ redhat_pool }}"                          
     autosubscribe: no
-  when: ansible_distribution == 'Red Hat Enterprise Linux
+  when: ansible_distribution == 'RedHat'
 
 - name: Adjust repos       
   script: "{{ reg_script }}"
-  when: ansible_distribution == 'Red Hat Enterprise Linux
+  when: ansible_distribution == 'RedHat'
 
 - name: Configuring eth0   
   script: files/ifcfg-eth0.sh
