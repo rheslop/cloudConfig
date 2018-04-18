@@ -168,3 +168,16 @@
   shell: "source /home/stack/stackrc && openstack baremetal introspection bulk start"
   become: yes
   become_user: stack
+
+- name: Cloning cloudConfig
+  git:
+    dest: /home/stack/cloudConfig
+    repo: https://github.com/rheslop/cloudConfig.git
+  become: yes
+  become_user: stack
+
+- name: Copy deploy script
+  copy:
+    dest: /home/stack/deploy.sh
+    src: /home/stack/cloudConfig/heat/deployments/rhosp-10/deploy.sh
+    remote_src: yes
