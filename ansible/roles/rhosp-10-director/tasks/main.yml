@@ -159,3 +159,12 @@
   become: yes
   become_user: stack
 
+- name: Configuring boot
+  shell: "source /home/stack/stackrc && openstack baremetal configure boot"
+  become: yes
+  become_user: stack
+
+- name: Beginning introspection
+  shell: "source /home/stack/stackrc && openstack baremetal introspection bulk start"
+  become: yes
+  become_user: stack
