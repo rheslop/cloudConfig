@@ -11,3 +11,6 @@ openstack baremetal create $BAREMETAL_FILE
 openstack baremetal node set $SYSTEM --driver-info deploy_kernel=$DEPLOY_KERNEL --driver-info deploy_ramdisk=$DEPLOY_RAMDISK
 
 openstack baremetal node set $SYSTEM --property capabilities=boot_option:local,boot_mode:uefi
+
+ironic node-set-provision-state $SYSTEM manage
+ironic node-set-provision-state $SYSTEM provide
