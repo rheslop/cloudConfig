@@ -8,8 +8,8 @@ fi
 sudo crudini --set /etc/nova/nova.conf DEFAULT dhcp_domain $1
 sudo crudini --set /etc/neutron/neutron.conf DEFAULT dns_domain $1
 
-sudo systemctl list-units | awk '/nova/ {print $1}' | xargs -I {} systemctl restart {}
-sudo systemctl list-units | awk '/neutron/ {print $1}' | xargs -I {} systemctl restart {}
+systemctl list-units | awk '/nova/ {print $1}' | sudo xargs -I {} systemctl restart {}
+systemctl list-units | awk '/neutron/ {print $1}' | sudo xargs -I {} systemctl restart {}
 
 echo "Complete."
 echo ""
