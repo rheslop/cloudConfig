@@ -181,3 +181,6 @@
     dest: /home/stack/deploy.sh
     src: /home/stack/cloudConfig/heat/deployments/rhosp-10/deploy.sh
     remote_src: yes
+    mode: 0755
+  become: yes
+  become_user: stack
