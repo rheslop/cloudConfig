@@ -19,7 +19,7 @@ baremetal
 openstack subnet create --network baremetal \
 --subnet-range $SUBNET \
 --gateway $GATEWAY \
---dns-namserver $DNSSERVER \
+--dns-nameserver $DNSSERVER \
 --allocation-pool start=${RANGE_START},end=${RANGE_END} \
 baremetal-subnet
 
@@ -72,12 +72,12 @@ else
 fi
 
 if [ -f /home/stack/images/overcloud-full.qcow2 ]; then
-	echo "uploading overcloud-full.qcow2."
+	echo "Uploading overcloud-full.qcow2."
 	openstack image create --file /home/stack/images/overcloud-full.qcow2 --public --container-format bare --disk-format qcow2 --property kernel_id=$KERNEL_ID --property ramdisk_id=$RAMDISK_ID rhel7-baremetal
 else
 	echo "/home/stack/images/overcloud-full.qcow2 not found - exiting."
 	exit 1
-done
+fi
 
 echo "Creating baremetal and virtual flavors..."
 echo ""
