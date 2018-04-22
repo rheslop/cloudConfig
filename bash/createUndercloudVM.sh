@@ -71,10 +71,12 @@ virt-customize -a $DISK \
 virsh define --file /tmp/${NAME}.xml && rm /tmp/${NAME}.xml
 virsh start ${NAME}
 
-echo -n "Waiting for VM."
-for i in {1..8}; do 
-  echo -n "."
+echo -n "Waiting for ${NAME} to become available."
+for i in {1..30}; do
+  sleep .5 && echo -n "."
 done
+echo ""
 
 cd ${CLOUDCONFIG}/ansible
+if [ -f /root/.ssh/known_hosts ]; then rm /root/.ssh/known_hosts ; fi
 ansible-playbook --ask-vault-pass ${CLOUDCONFIG}/ansible/launchUndercloud.yml
