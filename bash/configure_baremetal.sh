@@ -84,7 +84,6 @@ echo ""
 
 openstack flavor create --ram 1024 --disk 20 --vcpus 1 baremetal
 openstack flavor set baremetal --property baremetal=true
-openstack flavor set --property capabilities='boot_option:local,boot_mode:uefi' baremetal
 
 openstack flavor create --ram 1024 --disk 20 --vcpus 1 virtual
 openstack flavor set virtual --property baremetal=false
