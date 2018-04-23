@@ -84,6 +84,7 @@ echo ""
 
 openstack flavor create --ram 1024 --disk 20 --vcpus 1 baremetal
 openstack flavor set baremetal --property baremetal=true
+openstack flavor set --property capabilities='boot_option:local,boot_mode:uefi' baremetal
 
 openstack flavor create --ram 1024 --disk 20 --vcpus 1 virtual
 openstack flavor set virtual --property baremetal=false
@@ -97,7 +98,7 @@ for i in $(openstack hypervisor list -f value -c "Hypervisor Hostname" | grep -i
 	openstack aggregate add host virtual-hosts $i
 done
 
-CONTROLLERS=$(openstack server list | awk '/troll/ {print $4}')
+CONTROLLERS=$(openstack compute service list | awk '/troll/ {print $6}' | sort | uniq)
 for i in $CONTROLLERS ; do openstack aggregate add host baremetal-hosts $i ; done
 
 echo "Creating key pair."
