@@ -41,7 +41,7 @@ source /home/stack/overcloudrc
 
 if [ -f /home/stack/images/ironic-python-agent.kernel ]; then
 	echo "Uploading IPA kernel image."
-	openstack image create --public --container-format aki --disk-format aki --file /home/stack/images/ironic-python-agent.kernel deploy.kernel
+	openstack image create --public --container-format aki --disk-format aki --file /home/stack/images/ironic-python-agent.kernel deploy-kernel
 else
 	echo "/home/stack/images/ironic-python-agent.kernel not found - exiting."
 	exit 1
