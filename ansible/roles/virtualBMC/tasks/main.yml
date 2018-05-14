@@ -1,10 +1,10 @@
 - name: Local install of rdo repository
-  yum:
+  package:
     name: https://www.rdoproject.org/repos/rdo-release.rpm
     state: present
 
 - name: Install python-virtualbmc
-  yum:
+  package:
     name: python-virtualbmc
     state: present
 
@@ -16,8 +16,8 @@
     content: |
       #!/bin/bash
       for i in {1..3}; do
-        vmbc start controller-${i}
-        vmbc start compute-${i}
+        vbmc start controller-${i}
+        vbmc start compute-${i}
       done
     dest: /usr/local/bin/vbmc-start.sh
     mode: 0755
@@ -59,7 +59,7 @@
     owner: root
     group: root
 
-- name: Pausing for services to become available (10 seconds...)
+- name: Pausing for services to become available
   pause:
     seconds: 10
 
