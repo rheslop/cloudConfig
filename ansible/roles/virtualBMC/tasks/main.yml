@@ -1,0 +1,77 @@
+- name: Local install of rdo repository
+  yum:
+    name: https://www.rdoproject.org/repos/rdo-release.rpm
+    state: present
+
+- name: Install python-virtualbmc
+  yum:
+    name: python-virtualbmc
+    state: present
+
+- name: Add virtual BMCs
+  script: "../files/vbmc.sh"
+
+- name: Create script for starting Virtual BMCs
+  copy:
+    content: |
+      #!/bin/bash
+      for i in {1..3}; do
+        vmbc start controller-${i}
+        vmbc start compute-${i}
+      done
+    dest: /usr/local/bin/vbmc-start.sh
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create virtual BMC service file
+  copy:
+    content: |
+      [Unit]
+      After=libvirtd.service
+
+      [Service]
+      ExecStart=/usr/local/bin/vbmc-start.sh
+
+      [Install]
+      WantedBy=default.target
+    dest: /etc/systemd/system/virtual-bmc.service
+    mode: 0664
+    owner: root
+    group: root
+
+- name: Create firewalld service
+  copy:
+    content: |
+      <?xml version"1.0" encoding="utf-8"?>
+      <service>
+        <short>IPMI control</short>
+        <description>IPMI ports for openstack domains.</description>
+        <port protocol="udp port="6231"/> <!-- compute-1 -->
+        <port protocol="udp port="6232"/> <!-- compute-1 -->
+        <port protocol="udp port="6233"/> <!-- compute-1 -->
+        <port protocol="udp port="6211"/> <!-- controller-1 -->
+        <port protocol="udp port="6212"/> <!-- controller-2 -->
+        <port protocol="udp port="6213"/> <!-- controller-3 -->
+      </service>
+    dest: /etc/firewalld/services/openstack-ipmi.xml
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Pausing for services to become available (10 seconds...)
+  pause:
+    seconds: 10
+
+- name: Ensure virtual BMC service is enabled and started
+  systemd:
+    daemon_reload: yes
+    name: virtual-bmc.service
+    state: started
+    enabled: yes
+
+- name: Opening firewalld ports
+  firewalld:
+    service: openstack-ipmi
+    permanent: true
+    state: enabled
