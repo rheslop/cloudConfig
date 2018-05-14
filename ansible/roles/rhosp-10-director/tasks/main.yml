@@ -128,22 +128,6 @@
   become: yes
   become_user: stack
 
-- name: Get pubkey
-  command: cat /home/stack/.ssh/id_rsa.pub
-  register: pubkey
-
-- name: inject pubkey
-  lineinfile:
-    state: present
-    create: yes
-    path: /root/.ssh/authorized_keys
-    mode: 0600
-    owner: root
-    group: root
-    setype: ssh_home_t
-    line: "{{ pubkey.stdout }}"
-  delegate_to: 127.0.0.1
-
 - name: Running instackenv.sh
   script: "../files/{{ instackenv_sh }}"
   args:
