@@ -78,5 +78,5 @@ done
 echo ""
 
 cd ${CLOUDCONFIG}/ansible
-if [ -f /root/.ssh/known_hosts ]; then rm /root/.ssh/known_hosts ; fi
+if [ -f /root/.ssh/known_hosts ]; then ssh-keygen -R undercloud -f ~/.ssh/known_hosts; fi
 ansible-playbook --ask-vault-pass ${CLOUDCONFIG}/ansible/launchUndercloud.yml
