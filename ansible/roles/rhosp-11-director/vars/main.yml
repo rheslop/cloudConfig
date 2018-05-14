@@ -1,6 +1,5 @@
 shortname: director
 domainname: servermain.local
-ip_address: 10.102.0.13
 stackhome: /home/stack
 
 # Define the names of the source files that will be used to create
