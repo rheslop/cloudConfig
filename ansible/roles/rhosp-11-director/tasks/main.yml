@@ -2,12 +2,8 @@
   include_vars:
     file: locked-vars.yml
 
-- name: Registering Red Hat system
-  include_tasks: register_redhat.yml
-  when: ansible_distribution == 'Red Hat Enterprise Linux'
-
-- name: Running extra tasks
-  include_tasks: extras.yml
+- name: Running preconfiguration tasks
+  include_tasks: pre-configuration.yml
 
 - name: Update the undercloud
   yum:
@@ -30,18 +26,9 @@
     password: "{{ stack_pass }}"
     state: present
 
-- name: creat images directory
+- name: create images directory
   file:
     path: /home/stack/images
-    state: directory
-    owner: stack
-    group: stack
-    mode: 0755
-    setype: user_home_t
-
-- name: create templates directory
-  file:
-    path: /home/stack/templates
     state: directory
     owner: stack
     group: stack
@@ -132,22 +119,6 @@
   become: yes
   become_user: stack
 
-- name: Get pubkey
-  command: cat /home/stack/.ssh/id_rsa.pub
-  register: pubkey
-
-- name: inject pubkey
-  lineinfile:
-    state: present
-    create: yes
-    path: /root/.ssh/authorized_keys
-    mode: 0600
-    owner: root
-    group: root
-    setype: ssh_home_t
-    line: "{{ pubkey.stdout }}"
-  delegate_to: 127.0.0.1
-
 - name: Running instackenv.sh
   script: "../files/{{ instackenv_sh }}"
   args:
@@ -160,3 +131,28 @@
   become: yes
   become_user: stack
 
+- name: Configuring boot
+  shell: "source /home/stack/stackrc && openstack baremetal configure boot"
+  become: yes
+  become_user: stack
+
+- Beginning introspection
+  shell: "source /home/stack/stackrc && openstack baremetal introspection bulk start"
+  become: yes
+  become_user: stack
+
+- name: Cloning cloudconfig
+  git:
+    dest: /home/stack/cloudConfig
+    repo: https://github.com/rheslop/cloudConfig.git
+  become: yes
+  become_user: stack
+
+- name: Copy deploy script
+  copy:
+    dest: /home/stack/deploy.sh
+    src: /home/stack/cloudConfig/heat/deployments/rhosp-11/deploy.sh
+    remote_src: yes
+    mode: 0755
+  become: yes
+  become_user: stack
