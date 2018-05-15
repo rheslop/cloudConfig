@@ -4,4 +4,5 @@ time openstack overcloud deploy --templates \
 --control flavor control --compute-flavor compute \
 --control-scale 3 --compute-scale 3 \
 -e $TEMPLATES_DIR/overcloud_images.yaml \
+-e $TEMPLATES_DIR/hostname-map.yaml \
 --ntp-server pool.ntp.org
