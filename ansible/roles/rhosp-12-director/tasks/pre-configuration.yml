@@ -1,0 +1,12 @@
+- name: Registering to Red Hat                         
+  redhat_subscription:     
+    state: present         
+    username: "{{ rhn_username }}"                     
+    password: "{{ rhn_password }}"                     
+    pool: "{{ redhat_pool }}"                          
+    autosubscribe: no
+  when: ansible_distribution == 'RedHat'
+
+- name: Adjust repos       
+  script: "{{ reg_script }}"
+  when: ansible_distribution == 'RedHat'
