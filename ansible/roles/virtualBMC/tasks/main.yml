@@ -70,8 +70,12 @@
     state: started
     enabled: yes
 
+# Error: https://github.com/ansible/ansible/issues/38161 (?)
+# - name: Opening firewalld ports
+#   firewalld:
+#     service: openstack-ipmi
+#     permanent: true
+#     state: enabled
+
 - name: Opening firewalld ports
-  firewalld:
-    service: openstack-ipmi
-    permanent: true
-    state: enabled
+  shell: "firewall-cmd --add-service openstack-ipmi && firewall-cmd --add-service openstack-ipmi --permanent"
