@@ -43,25 +43,22 @@
 - name: Create firewalld service
   copy:
     content: |
-      <?xml version"1.0" encoding="utf-8"?>
+      <?xml version="1.0" encoding="utf-8"?>
       <service>
         <short>IPMI control</short>
         <description>IPMI ports for openstack domains.</description>
-        <port protocol="udp port="6231"/> <!-- compute-1 -->
-        <port protocol="udp port="6232"/> <!-- compute-1 -->
-        <port protocol="udp port="6233"/> <!-- compute-1 -->
-        <port protocol="udp port="6211"/> <!-- controller-1 -->
-        <port protocol="udp port="6212"/> <!-- controller-2 -->
-        <port protocol="udp port="6213"/> <!-- controller-3 -->
+        <port protocol="udp" port="6231"/> <!-- compute-1 -->
+        <port protocol="udp" port="6232"/> <!-- compute-1 -->
+        <port protocol="udp" port="6233"/> <!-- compute-1 -->
+        <port protocol="udp" port="6211"/> <!-- controller-1 -->
+        <port protocol="udp" port="6212"/> <!-- controller-2 -->
+        <port protocol="udp" port="6213"/> <!-- controller-3 -->
       </service>
     dest: /etc/firewalld/services/openstack-ipmi.xml
     mode: 0644
     owner: root
     group: root
-
-- name: Pausing for services to become available
-  pause:
-    seconds: 10
+  notify: reload firewall
 
 - name: Ensure virtual BMC service is enabled and started
   systemd:

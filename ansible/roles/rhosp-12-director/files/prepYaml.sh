@@ -1,6 +1,8 @@
 TEMPLATES_DIR=/home/stack/cloudConfig/heat/deployments/rhosp-12/templates
 DNS=1.1.1.1
 
+source /home/stack/stackrc
+
 TAG=\
 $(sudo openstack overcloud container image tag discover \
 --image registry.access.redhat.com/rhosp12/openstack-base:latest \
