@@ -1,0 +1,23 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Fix SSH latency by setting UseDNS to 'no'
+
+resources:
+  userdata:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+      - config: {get_resource: init_config}
+
+  init_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config: |
+        #!/bin/bash
+        if grep 'UseDNS no' /etc/ssh/sshd_config; then : ; else
+        sed -i 's/UseDNS.*/UseDNS no/' /etc/ssh/sshd_config; fi
+
+outputs:
+  OS::stack_id:
+    value: {get_resource: userdata}
