@@ -1,0 +1,7 @@
+# After filling in these variables, lock file with:
+# ansible-vault encrypt locked-vars.yml
+
+stack_pass:
+rhn_username:
+rhn_password:
+redhat_pool:

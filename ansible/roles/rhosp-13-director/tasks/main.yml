@@ -1,0 +1,169 @@
+- name: Including locked vars
+  include_vars:
+    file: locked-vars.yml
+
+- name: Running preconfiguration tasks
+  include_tasks: pre-configuration.yml
+
+- name: Update the undercloud
+  yum:
+    name: "*"
+    state: latest
+  register: update
+
+- name: Create group stack
+  group:
+    name: stack
+    state: present
+
+- name: Create user stack
+  user:
+    name: stack
+    group: stack
+    createhome: yes
+    move_home: yes
+    home: /home/stack
+    password: "{{ stack_pass }}"
+    state: present
+
+- name: create images and templates directories
+  file:
+    path: "/home/stack/{{ item }}"
+    state: directory
+    owner: stack
+    group: stack
+  setype: user_home_t
+  with_items:
+    - images
+    - templates
+
+- name: create /etc/sudoers.d/stack
+  copy:
+    dest: /etc/sudoers.d/stack
+    mode: 0440
+    content: "stack ALL=(root) NOPASSWD:ALL"
+    owner: root
+    group: root
+
+- name: Configure hostname
+  hostname:
+    name: "{{ shortname }}.{{ domainname }}"
+
+- name: Configure /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: "{{ shortname }}"
+    state: present
+    line: "{{ ansible_default_ipv4.address }} {{ shortname }} {{ shortname }}.{{ domainname }}"
+
+- name: Rebooting node
+  shell: sleep 3 && /sbin/reboot
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: Waitin on node to return
+  wait_for:
+    host: "{{ ansible_ssh_host }}"
+    state: started
+    port: 22
+    delay: 30
+    timeout: 600
+    connect_timeout: 10
+  delegate_to: localhost
+
+- name: Install undercloud packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - crudini
+    - python-tripleoclient
+    - rhosp-director-images
+    - rhosp-director-images-ipa
+    - tmux
+
+- name: Copying undercloud.conf
+  copy:
+    src: "{{ undercloud_conf }}"
+    dest: /home/stack/undercloud.conf
+    owner: stack
+    group: stack
+
+- name: Check for undercloud installation
+  shell: "tail -n 12 /home/stack/.instack/install-undercloud.log | head -n 1"
+  register: install_status
+  failed_when: false
+  changed_when: false
+
+- name: Installation of the Undercloud (Please be patient)
+  shell: openstack undercloud install
+  become: yes
+  become_user: stack
+  async: 14400
+  poll: 60
+  when: install_status.stdout != "Undercloud install complete."
+
+- name: Extracting images
+  unarchive:
+    remote_src: yes
+    src: "{{ item }}"
+    dest: /home/stack/images
+    creates: overcloud-full.qcow2
+  become: yes
+  become_user: stack
+  with_items:
+    - /usr/share/rhosp-director-images/overcloud-full-latest-13.0.tar
+    - /usr/share/rhosp-director-images/ironic-python-agent-latest-13.0.tar
+
+- name: Uploading images to glance
+  shell: "source /home/stack/stackrc && openstack overcloud image upload --image-path /home/stack/images/"
+  become: yes
+  become_user: stack
+
+- name: Running instackenv.sh
+  script: "../files/{{ instackenv_sh }}"
+  args:
+    creates: /home/stack/instackenv.json
+  become: yes
+  become_user: stack
+
+- name: Running postconfiguration tasks
+  include_tasks: post-configuration.yml
+
+- name: Importing ironic nodes
+  shell: "source  /home/stack/stackrc && openstack overcloud node import /home/stack/instackenv.json"
+  become: yes
+  become_user: stack
+
+- name: Configuring boot
+  shell: "source /home/stack/stackrc && openstack overcloud node configure --all-manageable"
+  become: yes
+  become_user: stack
+
+- name: Beginning introspection
+  shell: "source /home/stack/stackrc && openstack overcloud node introspect --all-manageable"
+  become: yes
+  become_user: stack
+
+- name: Cloning cloudConfig
+  git:
+    dest: /home/stack/cloudConfig
+    repo: https://github.com/rheslop/cloudConfig.git
+  become: yes
+  become_user: stack
+
+- name: Copy deploy script
+  copy:
+    dest: /home/stack/deploy.sh
+    src: /home/stack/cloudConfig/heat/deployments/rhosp-13/deploy.sh
+    remote_src: yes
+    mode: 0755
+  become: yes
+  become_user: stack
+
+- name: Prep Container registry
+  script: ../files/prepYaml.sh
+
+- name: Set nodes to available
+  shell: "source /home/stack/stackrc && for i in $(openstack baremetal node list -c UUID | awk '{print $2}' | grep -); do openstack baremetal node provide ${i} ; done"
