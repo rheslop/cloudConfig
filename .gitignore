@@ -1,4 +1,3 @@
 ansible/*retry
-ansible/roles/rhosp-10-director/vars/locked-vars.yml
-ansible/roles/rhosp-11-director/vars/locked-vars.yml
+ansible/roles/*/vars/locked-vars.yml
 
