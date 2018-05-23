@@ -5,5 +5,4 @@ time openstack overcloud deploy --templates \
 --control-scale 3 --compute-scale 3 \
 -e $TEMPLATES_DIR/overcloud_images.yaml \
 -e $TEMPLATES_DIR/hostname-map.yaml \
--e $TEMPLATES_DIR/post-config.yaml \
 --ntp-server pool.ntp.org

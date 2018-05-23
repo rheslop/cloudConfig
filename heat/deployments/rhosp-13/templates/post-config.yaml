@@ -1,3 +1,0 @@
-resource_registry:
-  OS::TripleO::NodeExtraConfigPost:
-    /home/stack/cloudConfig/heat/deployments/rhosp-13/templates/post-config-logic.yaml
