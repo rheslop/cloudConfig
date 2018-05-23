@@ -1,18 +1,10 @@
-TEMPLATES_DIR=/home/stack/cloudConfig/heat/deployments/rhosp-12/templates
+TEMPLATES_DIR=/home/stack/cloudConfig/heat/deployments/rhosp-13/templates
 DNS=8.8.8.8
 
 source /home/stack/stackrc
 
-TAG=\
-$(sudo openstack overcloud container image tag discover \
---image registry.access.redhat.com/rhosp12/openstack-base:latest \
---tag-from-label version-release)
-
 openstack overcloud container image prepare \
---namespace=registry.access.redhat.com/rhosp12 \
---prefix=openstack- \
---tag=$TAG \
---env-file=${TEMPLATES_DIR}/overcloud_images.yaml
+--output-images-file ${TEMPLATES_DIR}/overcloud_images.yaml
 
 # Overcloud nodes will fail to download containers from registry
 # if no access to outside
