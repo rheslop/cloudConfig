@@ -26,16 +26,13 @@
     password: "{{ stack_pass }}"
     state: present
 
-- name: create images and templates directories
+- name: create images directory
   file:
-    path: "/home/stack/{{ item }}"
+    path: /home/stack/images
     state: directory
     owner: stack
     group: stack
   setype: user_home_t
-  with_items:
-    - images
-    - templates
 
 - name: create /etc/sudoers.d/stack
   copy:
