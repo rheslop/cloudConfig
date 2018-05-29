@@ -1,8 +1,19 @@
 #!/bin/bash
 
-
-
 # Define virtual networks
+
+cat > /tmp/net-br0.xml << EOF
+<network>
+  <name>net-br0</name>
+  <forward mode='bridge'/>
+  <bridge name='br0'/>
+</network>
+EOF
+
+virsh net-define /tmp/net-br0.xml
+virsh net-start net-br0
+virsh net-autostart net-br0
+rm -rf /tmp/net-br0.xml
 
 cat > /tmp/Provisioning.xml << EOF
 <network>
@@ -70,8 +81,8 @@ cat > /tmp/StorageCluster.xml << EOF
 </network>
 EOF
 
-virsh net-define /tmp/StorageCluter.xml
-virsh net-start StorageCluter
+virsh net-define /tmp/StorageCluster.xml
+virsh net-start StorageCluster
 virsh net-autostart StorageCluster
 rm -rf /tmp/StorageCluster.xml
 
