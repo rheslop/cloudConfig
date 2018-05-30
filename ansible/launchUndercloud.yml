@@ -1,13 +1,6 @@
-#- name: Install virtualBMCs
-#  hosts: localhost
-#
-#  roles:
-#  - virtualBMC
-#
-
 - name: Install Director
   hosts: undercloud
   remote_user: root
   
   roles:
-  - rhosp-12-director
+  - rhosp-13-director
