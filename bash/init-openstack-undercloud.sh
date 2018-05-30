@@ -56,7 +56,7 @@ virt-customize -a $DISK \
 --selinux-relabel
 
 /usr/bin/virt-install --name ${NAME} \
---memory=8192 \
+--memory=10240 \
 --vcpus=2 \
 --disk path=$DISK \
 --import \
