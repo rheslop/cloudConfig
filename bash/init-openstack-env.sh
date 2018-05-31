@@ -6,7 +6,6 @@ CREATE_VIRTUAL_BMCS=no
 
 # Define virtual networks
 
-
 function DEFINE_VIRTUAL_NETWORKS {
 
 cat > /tmp/net-br0.xml << EOF
@@ -35,7 +34,6 @@ virsh net-define /tmp/Provisioning.xml
 virsh net-start Provisioning
 virsh net-autostart Provisioning
 rm -rf /tmp/Provisioning.xml
-
 
 cat > /tmp/Tenant.xml << EOF
 <network>
@@ -92,7 +90,6 @@ virsh net-define /tmp/StorageCluster.xml
 virsh net-start StorageCluster
 virsh net-autostart StorageCluster
 rm -rf /tmp/StorageCluster.xml
-
 }
 
 function DEFINE_VMS {
@@ -146,7 +143,6 @@ qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
 virsh define --file /root/files/vms/compute-${i}.xml
 
 done
-
 }
 
 function CREATE_VBMCS {
@@ -158,13 +154,12 @@ sudo yum install -y python-virtualbmc
 
 vbmc add compute-1 --port 6231 --username admin --password password
 vbmc add compute-2 --port 6232 --username admin --password password
-vbmc add compute-3 --port 6233 --username admin --password password
 vbmc add controller-1 --port 6211 --username admin --password password
 vbmc add controller-2 --port 6212 --username admin --password password
 vbmc add controller-3 --port 6213 --username admin --password password
 
-
-for i in {1..3}; do vbmc start controller-${i}; vbmc start compute-${i}; done
+for i in {1..3}; do vbmc start controller-${i}; done
+for i in {1..2}; do vbmc start compute-${i}; done
 
 cat << EOF > ~/openstack-ipmi.xml
 <?xml version"1.0" encoding="utf-8"?>
@@ -173,7 +168,6 @@ cat << EOF > ~/openstack-ipmi.xml
   <description>IPMI ports for openstack domains.</description>
   <port protocol="udp" port="6231"/> <!-- compute-1 -->
   <port protocol="udp" port="6232"/> <!-- compute-2 -->
-  <port protocol="udp" port="6233"/> <!-- compute-3 -->
   <port protocol="udp" port="6211"/> <!-- controller-1 -->
   <port protocol="udp" port="6212"/> <!-- controller-2 -->
   <port protocol="udp" port="6213"/> <!-- controller-3 -->
@@ -188,7 +182,6 @@ systemctl restart firewalld.service
 
 firewall-cmd --add-service openstack-ipmi
 firewall-cmd --add-service openstack-ipmi --permanent
-
 }
 
 if [ "${CREATE_VIRTUAL_NETWORKS}" == "yes" ]; then
