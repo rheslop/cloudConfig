@@ -9,5 +9,3 @@ parameter_defaults:
     overcloud-controller-2: controller-3
     overcloud-compute-0: compute-1
     overcloud-compute-1: compute-2
-    overcloud-compute-2: compute-3
-

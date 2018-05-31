@@ -1,6 +1,13 @@
 #!/bin/bash
 
+CREATE_VIRTUAL_NETWORKS=no
+CREATE_VMS=yes
+CREATE_VIRTUAL_BMCS=no
+
 # Define virtual networks
+
+
+function DEFINE_VIRTUAL_NETWORKS {
 
 cat > /tmp/net-br0.xml << EOF
 <network>
@@ -86,6 +93,10 @@ virsh net-start StorageCluster
 virsh net-autostart StorageCluster
 rm -rf /tmp/StorageCluster.xml
 
+}
+
+function DEFINE_VMS {
+
 # Controller (7G memory, 2 vcpus, 80 GiB HDD)
 #
 
@@ -114,7 +125,7 @@ done
 # Compute (7G memory, 2 vcpus, 120 GiB HDD)
 #
 
-for i in 1 2 3; do
+for i in 1 2; do
 qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
 
 /usr/bin/virt-install \
@@ -135,6 +146,10 @@ qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
 virsh define --file /root/files/vms/compute-${i}.xml
 
 done
+
+}
+
+function CREATE_VBMCS {
 
 # Create virtual BMCs
 
@@ -174,3 +189,16 @@ systemctl restart firewalld.service
 firewall-cmd --add-service openstack-ipmi
 firewall-cmd --add-service openstack-ipmi --permanent
 
+}
+
+if [ "${CREATE_VIRTUAL_NETWORKS}" == "yes" ]; then
+	DEFINE_VIRTUAL_NETWORKS
+fi
+
+if [ "${CREATE_VMS}" == "yes" ]; then
+	DEFINE_VMS
+fi
+
+if [ "${CREATE_VIRTUAL_BMCS}" == "yes" ]; then
+	CREATE_VBMCS
+fi

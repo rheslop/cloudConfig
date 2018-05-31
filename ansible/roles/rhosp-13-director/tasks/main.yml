@@ -164,3 +164,8 @@
 
 - name: Set nodes to available
   shell: "source /home/stack/stackrc && for i in $(openstack baremetal node list -c UUID | awk '{print $2}' | grep -); do openstack baremetal node provide ${i} ; done"
+
+- name: Beginning deploy in tmux session
+  shell: tmux new-session -d -s deploy "source /home/stack/stackrc && /home/stack/deploy.sh"
+  become: yes
+  become_user: stack
