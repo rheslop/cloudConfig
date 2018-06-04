@@ -22,7 +22,9 @@ parameter_defaults:
   ExternalInterfaceDefaultRoute: 192.168.0.1
   #
   DnsServers: ["8.8.8.8","8.8.4.4"]
-  NeutronNetworkType: 'vxlan'
+  NeutronExternalNetworkBridge: "''"
+  NeutronNetworkType: 'vxlan,vlan'
   NeutronTunnelTypes: 'vxlan'
+  NeutronBridgeMappings: 'datacentre:br-ex'
   NeutronNetworkVLANRanges: 'datacentre:1:1000'
-  BondInterfaceOvsOptions: "bond_mode=active-backup"
+  BondInterfaceOvsOptions: 'bond_mode=active-backup'

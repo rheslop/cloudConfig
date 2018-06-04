@@ -1,5 +1,4 @@
 parameter_defaults:
-  CloudName: rhosp-10-lab
+  CloudName: rhosp-13-lab
   TimeZone: 'US/Central'
-  controllerExtraConfig:
-    keystone::token_provider: 'fernet'
+  KeystoneTokenProvider: 'fernet'

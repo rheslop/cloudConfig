@@ -1,4 +1,4 @@
-heat_template_version: 2015-04-30
+heat_template_version: pike
 
 description: >
   Software Config to drive os-net-config to configure multiple interfaces
@@ -79,55 +79,58 @@ parameters:
   EC2MetadataIp: # Override this via parameter_defaults
     description: The IP address of the EC2 metadata server.
     type: string
-
 resources:
   OsNetConfigImpl:
-    type: OS::Heat::StructuredConfig
+    type: OS::Heat::SoftwareConfig
     properties:
-      group: os-apply-config
+      group: script
       config:
-        os_net_config:
-          network_config:
-            - type: interface
-              name: nic1
-              use_dhcp: false
-              dns_servers: {get_param: DnsServers}
-              addresses:
-                - ip_netmask:
-                    list_join:
-                      - '/'
-                      - - {get_param: ControlPlaneIp}
-                        - {get_param: ControlPlaneSubnetCidr}
-              routes:
-                - ip_netmask: 169.254.169.254/32
-                  next_hop: {get_param: EC2MetadataIp}
-                - default: true
-                  next_hop: {get_param: ControlPlaneDefaultRoute}
-            - type: ovs_bridge
-              name: br-tenant
-              use_dhcp: false
-              addresses:
-                - ip_netmask: {get_param: TenantIpSubnet}
-              members:
-                - type: interface
-                  name: nic2
-                  use_dhcp: false
-                  primary: true
-            - type: interface
-              name: nic3
-              use_dhcp: false
-              addresses:
-                - ip_netmask: {get_param: InternalApiIpSubnet}
-            - type: interface
-              name: nic4
-              use_dhcp: false
-              addresses:
-                - ip_netmask: {get_param: StorageIpSubnet}
-            - type: interface
-              name: nic5
-              use_dhcp: false
-              addresses:
-                - ip_netmask: {get_param: StorageMgmtIpSubnet}
+        str_replace:
+          template:
+            get_file: /usr/share/openstack-tripleo-heat-templates/network/scripts/run-os-net-config.sh
+          params:
+            $network_config:
+              network_config:
+              - type: interface
+                name: nic1
+                use_dhcp: false
+                dns_servers: {get_param: DnsServers}
+                addresses:
+                  - ip_netmask:
+                      list_join:
+                        - '/'
+                        - - {get_param: ControlPlaneIp}
+                          - {get_param: ControlPlaneSubnetCidr}
+                routes:
+                  - ip_netmask: 169.254.169.254/32
+                    next_hop: {get_param: EC2MetadataIp}
+                  - default: true
+                    next_hop: {get_param: ControlPlaneDefaultRoute}
+              - type: ovs_bridge
+                name: br-tenant
+                use_dhcp: false
+                addresses:
+                  - ip_netmask: {get_param: TenantIpSubnet}
+                members:
+                  - type: interface
+                    name: nic2
+                    use_dhcp: false
+                    primary: true
+              - type: interface
+                name: nic3
+                use_dhcp: false
+                addresses:
+                  - ip_netmask: {get_param: InternalApiIpSubnet}
+              - type: interface
+                name: nic4
+                use_dhcp: false
+                addresses:
+                  - ip_netmask: {get_param: StorageIpSubnet}
+              - type: interface
+                name: nic5
+                use_dhcp: false
+                addresses:
+                  - ip_netmask: {get_param: StorageMgmtIpSubnet}
 
 outputs:
   OS::stack_id:
