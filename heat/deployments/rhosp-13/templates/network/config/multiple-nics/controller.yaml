@@ -121,7 +121,6 @@ resources:
               - type: ovs_bridge
                 name: br-tenant
                 use_dhcp: false
-                defroute: false
                 addresses:
                   - ip_netmask:
                       get_param: TenantIpSubnet
@@ -133,19 +132,14 @@ resources:
               - type: interface
                 name: nic3
                 use_dhcp: false
-                defroute: false
                 addresses:
                   - ip_netmask:
                       get_param: InternalApiIpSubnet
               - type: ovs_bridge
-                name:
-                  get_input: bridge_name
-                ovs_options:
-                  get_param: BondInterfaceOvsOptions
+                name: bridge_name
                 dns_servers:
                   get_param: DnsServers
                 use_dhcp: false
-                defroute: true
                 addresses:
                   - ip_netmask:
                       get_param: ExternalIpSubnet
@@ -161,14 +155,12 @@ resources:
               - type: interface
                 name: nic5
                 use_dhcp: false
-                defroute: false
                 addresses:
                   - ip_netmask:
                       get_param: StorageIpSubnet
               - type: interface
                 name: nic6
                 use_dhcp: false
-                defroute: false
                 addresses:
                   - ip_netmask:
                       get_param: StorageMgmtIpSubnet
