@@ -111,18 +111,20 @@ resources:
                 addresses:
                   - ip_netmask:
                       list_join:
-                        - /
-                        - - get_param: ControlPlaneIp
-                          - get_param: ControlPlaneSubnetCidr
+                      - /
+                      - - get_param: ControlPlaneIp
+                        - get_param: ControlPlaneSubnetCidr
                 routes:
                   - ip_netmask: 169.254.169.254/32
-                    next_hop: {get_param: EC2MetadataIp}
+                    next_hop:
+                      get_param: EC2MetadataIp
               - type: ovs_bridge
                 name: br-tenant
                 use_dhcp: false
                 defroute: false
                 addresses:
-                  - ip_netmask: {get_param: TenantIpSubnet}
+                  - ip_netmask:
+                      get_param: TenantIpSubnet
                 members:
                   - type: interface
                     name: nic2
@@ -133,18 +135,24 @@ resources:
                 use_dhcp: false
                 defroute: false
                 addresses:
-                  - ip_netmask: {get_param: InternalApiIpSubnet}
+                  - ip_netmask:
+                      get_param: InternalApiIpSubnet
               - type: ovs_bridge
-                name: {get_input: bridge_name}
-                ovs_options: {get_param: BondInterfaceOvsOptions}
-                dns_servers: {get_param: DnsServers}
+                name:
+                  get_input: bridge_name
+                ovs_options:
+                  get_param: BondInterfaceOvsOptions
+                dns_servers:
+                  get_param: DnsServers
                 use_dhcp: false
                 defroute: true
                 addresses:
-                  - ip_netmask: {get_param: ExternalIpSubnet}
+                  - ip_netmask:
+                      get_param: ExternalIpSubnet
                 routes:
                   - default: true
-                    next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                    next_hop:
+                      get_param: ExternalInterfaceDefaultRoute
                 members:
                   - type: interface
                     name: nic4
@@ -155,15 +163,18 @@ resources:
                 use_dhcp: false
                 defroute: false
                 addresses:
-                  - ip_netmask: {get_param: StorageIpSubnet}
+                  - ip_netmask:
+                      get_param: StorageIpSubnet
               - type: interface
                 name: nic6
                 use_dhcp: false
                 defroute: false
                 addresses:
-                  - ip_netmask: {get_param: StorageMgmtIpSubnet}
+                  - ip_netmask:
+                      get_param: StorageMgmtIpSubnet
 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
-    value: {get_resource: OsNetConfigImpl}
+    value:
+      get_resource: OsNetConfigImpl

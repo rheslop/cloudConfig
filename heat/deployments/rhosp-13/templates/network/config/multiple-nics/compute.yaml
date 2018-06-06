@@ -98,19 +98,22 @@ resources:
                 addresses:
                   - ip_netmask:
                       list_join:
-                        - '/'
-                        - - {get_param: ControlPlaneIp}
-                          - {get_param: ControlPlaneSubnetCidr}
+                      - /
+                      - - get_param: ControlPlaneIp
+                        - get_param: ControlPlaneSubnetCidr
                 routes:
                   - ip_netmask: 169.254.169.254/32
-                    next_hop: {get_param: EC2MetadataIp}
+                    next_hop:
+                      get_param: EC2MetadataIp
                   - default: true
-                    next_hop: {get_param: ControlPlaneDefaultRoute}
+                    next_hop:
+                      get_param: ControlPlaneDefaultRoute
               - type: ovs_bridge
                 name: br-tenant
                 use_dhcp: false
                 addresses:
-                  - ip_netmask: {get_param: TenantIpSubnet}
+                  - ip_netmask:
+                      get_param: TenantIpSubnet
                 members:
                   - type: interface
                     name: nic2
@@ -120,19 +123,23 @@ resources:
                 name: nic3
                 use_dhcp: false
                 addresses:
-                  - ip_netmask: {get_param: InternalApiIpSubnet}
+                  - ip_netmask:
+                      get_param: InternalApiIpSubnet
               - type: interface
                 name: nic4
                 use_dhcp: false
                 addresses:
-                  - ip_netmask: {get_param: StorageIpSubnet}
+                  - ip_netmask:
+                      get_param: StorageIpSubnet
               - type: interface
                 name: nic5
                 use_dhcp: false
                 addresses:
-                  - ip_netmask: {get_param: StorageMgmtIpSubnet}
+                  - ip_netmask:
+                      get_param: StorageMgmtIpSubnet
 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
-    value: {get_resource: OsNetConfigImpl}
+    value:
+      get_resource: OsNetConfigImpl

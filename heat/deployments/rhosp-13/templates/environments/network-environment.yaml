@@ -5,6 +5,7 @@ resource_registry:
     ../network/config/multiple-nics/controller.yaml
 
 parameter_defaults:
+  ControlPlaneIp: 192.168.101.101
   ControlPlaneSubnetCidr: '24'
   ControlPlaneDefaultRoute: 192.168.101.101
   EC2MetadataIp: 192.168.101.101
