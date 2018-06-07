@@ -8,12 +8,12 @@ fi
 
 case $1 in
         create)
-        watch -n 3 'ironic node-list; nova list; openstack stack list ; openstack stack list --nested | grep -v CREATE_C'
+        watch -n 3 'openstack baremetal node list; openstack server list; openstack stack list ; openstack stack list --nested | grep -v CREATE_C'
         ;;
         delete)
-        watch -n 3 'ironic node-list; nova list; openstack stack list --nested'
+        watch -n 3 'openstack baremetal node list; openstack server list; openstack stack list --nested'
         ;;
         update)
-        watch -n 3 'ironic node-list; nova list; openstack stack list ; openstack stack list --nested | grep -v CREATE_C | grep -v UPDATE_C'
+        watch -n 3 'openstack baremetal node list; openstack server list; openstack stack list ; openstack stack list --nested | grep -v CREATE_C | grep -v UPDATE_C'
 
 esac
