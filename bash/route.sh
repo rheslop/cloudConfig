@@ -79,6 +79,7 @@ openstack network create extnet --share --external \
 openstack subnet create subnet-extnet --network extnet \
 --allocation-pool start=${ALLOCATION_POOL_START},end=${ALLOCATION_POOL_END} \
 --gateway ${ALLOCATION_POOL_GATEWAY} \
+--dns-nameserver 8.8.8.8 \
 --subnet-range ${SUBNET_RANGE}
 
 openstack router create gateway_out

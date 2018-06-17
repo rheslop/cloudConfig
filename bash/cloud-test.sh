@@ -37,7 +37,11 @@ openstack flavor create --ram 8192 --disk 80 --vcpus 4 --id auto os.large
 
 # Create Network and subnet
 NETID=$(openstack network create int-net | awk '/\| id/ {print $4}')
-openstack subnet create int-subnet --network int-net --subnet-range 192.168.254.0/24
+
+openstack subnet create int-subnet \
+--network int-net \
+--dns-nameserver 8.8.8.8 \
+--subnet-range 192.168.254.0/24
 
 # Create VM
 nova boot --image cirros --flavor os.micro --nic net-id=$NETID test-instance0
