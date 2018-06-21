@@ -1,10 +1,23 @@
 # Valid formats are RAW or QCOW2
 FORMAT=QCOW2
+IMAGESDIR=~/images
+BASEOS=$(cat /etc/redhat-release | awk '{print $1}') 
 
-source /home/stack/overcloudrc
+case ${BASEOS} in
+	Red)
+	  source /home/stack/overcloudrc
+	  ;;
+	CentOS)
+	  source /root/keystonerc_admin
+	  ;;
+	*)
+	  echo "Not a recognized operating system."
+	  exit 1
+	  ;;
+esac
 
-if [ ! -d /home/stack/images ]; then mkdir -p /home/stack/images; fi
-cd /home/stack/images
+if [ ! -d ${IMAGESDIR} ]; then mkdir -p ${IMAGESDIR}; fi
+cd ${IMAGESDIR}
 
 if [ ! -f cirros-0.3.5-x86_64-disk.img ]; then
   curl -O http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
@@ -46,4 +59,3 @@ openstack subnet create int-subnet \
 # Create VM
 nova boot --image cirros --flavor os.micro --nic net-id=$NETID test-instance0
 
-# Create volume
