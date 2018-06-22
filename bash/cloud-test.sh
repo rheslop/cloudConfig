@@ -49,10 +49,10 @@ openstack flavor create --ram 4096 --disk 40 --vcpus 2 --id auto os.medium
 openstack flavor create --ram 8192 --disk 80 --vcpus 4 --id auto os.large
 
 # Create Network and subnet
-NETID=$(openstack network create int-net | awk '/\| id/ {print $4}')
+NETID=$(openstack network create internal_network | awk '/\| id/ {print $4}')
 
-openstack subnet create int-subnet \
---network int-net \
+openstack subnet create internal_subnet \
+--network internal_network \
 --dns-nameserver 8.8.8.8 \
 --subnet-range 192.168.254.0/24
 
