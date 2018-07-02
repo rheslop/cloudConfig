@@ -123,6 +123,7 @@ done
 #
 
 for i in 1 2; do
+
 qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
 
 /usr/bin/virt-install \
