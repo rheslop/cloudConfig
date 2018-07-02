@@ -68,6 +68,8 @@ virt-customize -a $DISK \
 --dry-run  \
 --print-xml > /tmp/${NAME}.xml
 
+qemu-img snapshot -c VANILLA ${DISK}
+
 virsh define --file /tmp/${NAME}.xml && rm /tmp/${NAME}.xml
 virsh start ${NAME}
 
