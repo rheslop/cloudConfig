@@ -15,7 +15,10 @@ sudo openstack overcloud container image upload \
 
 openstack overcloud container image prepare \
 --namespace 192.168.101.101:8787/rhosp13 \
---output-env-file ${TEMPLATES_DIR}/overcloud-images-env.yaml
+--output-env-file ${TEMPLATES_DIR}/overcloud-images-env.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/barbican.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/octavia.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/sensu-client.yaml
 
 SUBNET=$(openstack subnet list | awk '/ctlplane/ {print  $2}')
 openstack subnet set --dns-nameserver $DNS $SUBNET
