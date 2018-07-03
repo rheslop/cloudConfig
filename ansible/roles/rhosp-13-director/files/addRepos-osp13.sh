@@ -1,6 +1,4 @@
 #!/bin/bash
-# WARNING: This script uses beta RPMs, which should be modified
-# after the GA of RHOSP 13, with this warning removed.
 
 subscription-manager repos --disable=*
 subscription-manager repos \
