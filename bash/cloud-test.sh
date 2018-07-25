@@ -2,10 +2,11 @@
 FORMAT=QCOW2
 IMAGESDIR=~/images
 BASEOS=$(cat /etc/redhat-release | awk '{print $1}') 
+OVERCLOUDRC=$(ls /home/stack | egrep rc$ | grep -v stackrc)
 
 case ${BASEOS} in
 	Red)
-	  source /home/stack/overcloudrc
+	  source /home/stack/$OVERCLOUDRC
 	  ;;
 	CentOS)
 	  source /root/keystonerc_admin
