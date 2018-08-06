@@ -7,6 +7,7 @@ if [ -z $1 ]; then
 	echo "   ----------------"
 	echo "   Available loops:"
 	echo "   ----------------"
+	echo "   all-available"
 	echo "   delete-ironic-nodes"
 	echo "   delete-nested-stacks"
 	echo ""
@@ -14,6 +15,11 @@ if [ -z $1 ]; then
 fi
 
 case $1 in
+	all-available)
+	for i in $(openstack baremetal node list -c UUID -f value); do
+		openstack baremetal node provide ${i}
+	done
+	;;
 	delete-ironic-nodes)
 	for i in $(openstack baremetal node list -c UUID -f value); do
 		openstack baremetal node delete ${i}
