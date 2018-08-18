@@ -12,6 +12,7 @@ if [ -z $1 ]; then
 	echo "   delete-ironic-nodes"
 	echo "   delete-nested-stacks"
 	echo "   dump-introspection"
+        echo "   maintenance [on|off]"
 	echo ""
 	exit 0
 fi
@@ -44,6 +45,33 @@ case $1 in
 		openstack baremetal introspection data save --file /home/stack/introspection-data/${i}.txt ${i}
 	done
 	;;
+	maintenance)
+        if [ -z $2 ]; then
+		echo ""
+		echo "Usage: $0 maintenance [on|off]"
+		echo ""
+		exit 1
+	fi
+	case $2 in
+		on)
+		for i in $(openstack baremetal node list -c Name -f value); do
+		openstack baremetal node maintenance set ${i}
+		done
+		;;
+		off)
+                for i in $(openstack baremetal node list -c Name -f value); do
+		openstack baremetal node maintenance unset ${i}
+                done
+		;;
+		*)
+		echo ""
+		echo "Invalid maintenance state: \"$2\"
+		echo "Usage: $0 maintenance [on|off]"
+		echo ""
+		exit 2
+		;;
+	esac
+	;;	
 	*)
 	echo "No such loop \"$1\""
 	;;
