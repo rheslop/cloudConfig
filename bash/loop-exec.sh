@@ -65,7 +65,7 @@ case $1 in
 		;;
 		*)
 		echo ""
-		echo "Invalid maintenance state: \"$2\"
+		echo "Invalid maintenance state: \"$2\""
 		echo "Usage: $0 maintenance [on|off]"
 		echo ""
 		exit 2
