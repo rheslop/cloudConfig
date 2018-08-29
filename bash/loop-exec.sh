@@ -9,6 +9,7 @@ if [ -z $1 ]; then
 	echo "   ----------------"
 	echo "   all-available"
 	echo "   all-manageable"
+        echo "   custom-command"
 	echo "   delete-ironic-nodes"
 	echo "   delete-nested-stacks"
 	echo "   dump-introspection"
@@ -31,6 +32,12 @@ case $1 in
 	delete-ironic-nodes)
 	for i in $(openstack baremetal node list -c UUID -f value); do
 		openstack baremetal node delete ${i}
+	done
+	;;
+	custom-command)
+	read -p "~> " CUSTOM_COMMAND
+	for i in $(openstack server list -c Networks -f value | cut -d= -f2); do
+		ssh heat-admin@${i} "${CUSTOM_COMMAND}"
 	done
 	;;
 	delete-nested-stacks)
