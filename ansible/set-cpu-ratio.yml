@@ -1,0 +1,27 @@
+---
+- name: Register overcloud nodes
+  hosts: osp
+  user: heat-admin
+  become: yes
+
+  tasks:
+
+  - name: Set cpu allocation ratio to 0.0
+    ini_file:
+      path: /var/lib/config-data/puppet-generated/nova_libvirt/etc/nova/nova.conf
+      section: DEFAULT
+      option: cpu_allocation_ratio
+      value: 0.0
+    notify: 
+      - Restart compute
+      - Restart scheduler
+
+  handlers:
+
+  - name: Restart compute
+    shell: docker restart $(docker ps --filter name=nova_compute -q)
+    when: inventory_hostname in groups['computes']
+
+  - name: Restart scheduler
+    shell: docker restart $(docker ps --filter name=nova_scheduler -q)
+    when: inventory_hostname in groups['controllers']
