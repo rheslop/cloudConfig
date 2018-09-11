@@ -17,3 +17,8 @@ undercloud_conf: undercloud-servermain.conf
 
 # instackenv_json: instackenv-servermain.json
 reg_script: files/addRepos-osp13.sh
+
+# Deployment configuration, based on script
+# Current values are:
+# deploy-isolated-networks.sh | deploy-ovn.sh  
+deploy_script: deploy-isolated-networks.sh
