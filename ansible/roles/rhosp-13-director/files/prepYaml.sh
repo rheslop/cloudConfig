@@ -8,6 +8,7 @@ openstack overcloud container image prepare \
 --output-images-file ${TEMPLATES_DIR}/overcloud-images.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/barbican.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/octavia.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-ovn-dvr-ha.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/sensu-client.yaml
 
 sudo openstack overcloud container image upload \
@@ -18,6 +19,7 @@ openstack overcloud container image prepare \
 --output-env-file ${TEMPLATES_DIR}/overcloud-images-env.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/barbican.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/octavia.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-ovn-dvr-ha.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/sensu-client.yaml
 
 SUBNET=$(openstack subnet list | awk '/ctlplane/ {print  $2}')
