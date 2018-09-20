@@ -1,8 +1,12 @@
-# Valid formats are RAW or QCOW2
-FORMAT=QCOW2
+#!/bin/bash
+
+source /home/stack/stackrc
+
+FORMAT=QCOW2 # Valid formats are RAW or QCOW2
 IMAGESDIR=~/images
-BASEOS=$(cat /etc/redhat-release | awk '{print $1}') 
-OVERCLOUDRC=$(ls /home/stack | egrep rc$ | grep -v stackrc)
+BASEOS=$(cat /etc/redhat-release | awk '{print $1}')
+STACK_NAME=$(openstack stack list -c "Stack Name" -f value)
+OVERCLOUDRC=${STACK_NAME}rc
 
 case ${BASEOS} in
 	Red)
