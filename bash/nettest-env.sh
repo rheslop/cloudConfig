@@ -42,7 +42,7 @@ case $1 in
 		openstack router set ${GATEWAY} --external-gateway ${EXTNET}
 		openstack router add subnet ${GATEWAY} ${SUBNET} ; fi
 		if openstack keypair list -c Name -f value | grep ${KEYPAIR} ; then : ;
-		else openstack keypair create --private-key /home/stack/.ssh/id_rsa ${KEYPAIR} ; fi
+		else openstack keypair create --public-key /home/stack/.ssh/id_rsa.pub ${KEYPAIR} ; fi
 		if openstack server list -c Name -f value | grep ${SRV}-1 ; then : ;
 		else openstack server create --network $NET --flavor $FLAVOR --image $IMAGE --key-name ${KEYPAIR} ${SRV}-1 ; fi
 		if openstack server list -c Name -f value | grep ${SRV}-2 ; then : ;
