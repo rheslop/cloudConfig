@@ -1,6 +1,5 @@
 parameter_defaults:
   CloudName: rhosp-13-lab
   TimeZone: 'US/Central'
-  KeystoneTokenProvider: 'fernet'
   BarbicanSimpleCryptoGlobalDefault: true
 

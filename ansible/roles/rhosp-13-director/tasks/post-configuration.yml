@@ -1,11 +1,1 @@
-- name: Fernet setup
-  shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
-
-- name: Tar fernet keys
-  shell: tar -zcf /home/stack/keystone-fernet-keys.tar.gz /etc/keystone/fernet-keys
-  creates: /home/stack/keystone-fernet-keys.tar.gz
-
-- name: Upload fernet keys
-  shell: source /home/stack/stackrc && upload-swift-artifacts -f /home/stack/keystone-fernet-keys.tar.gz
-  become: yes
-  become_user: stack
+---
