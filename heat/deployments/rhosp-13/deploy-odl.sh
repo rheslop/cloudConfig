@@ -9,6 +9,6 @@ time openstack overcloud deploy --templates \
 -e ${CUSTOM_TEMPLATES}/environments/network-environment.yaml \
 -e ${TEMPLATES_HOME}/environments/network-isolation.yaml \
 -e ${CUSTOM_TEMPLATES}/environments/ip-layout.yaml \
--e ${TEMPLATES_HOME}/environments/services-docker/neutron-opendaylight.yaml
+-e ${TEMPLATES_HOME}/environments/services-docker/neutron-opendaylight.yaml \
 -e ${CUSTOM_TEMPLATES}/sundry.yaml \
 --ntp-server pool.ntp.org
