@@ -14,7 +14,7 @@ openstack overcloud container image prepare \
 -e ${SERVICES_DOCKER}/sensu-client.yaml
 
 sudo openstack overcloud container image upload \
---config-file ${TEMPLATES_DIR}/overcloud-images.yaml
+--config-file ${CUSTOM_TEMPLATES}/overcloud-images.yaml
 
 openstack overcloud container image prepare \
 --namespace 192.168.101.101:8787/rhosp13 \
