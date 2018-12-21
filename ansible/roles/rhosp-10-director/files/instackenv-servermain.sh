@@ -64,18 +64,6 @@ jq . << EOF > ~/instackenv.json
       "pm_user": "undercloud",
       "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
       "capabilities": "node:compute-1,boot_option:local"
-    },
-    {
-      "name": "compute-3",
-      "mac": ["52:54:81:01:a0:03"],
-      "cpu": "2",
-      "memory": "8192",
-      "disk": "100",
-      "pm_type": "pxe_ssh",
-      "pm_addr": "192.168.0.84",
-      "pm_user": "undercloud",
-      "pm_password": "$(cat /home/stack/.ssh/id_rsa)",
-      "capabilities": "node:compute-2,boot_option:local"
     }
   ]
 }
