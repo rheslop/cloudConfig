@@ -8,7 +8,6 @@ openstack overcloud container image prepare \
 --namespace registry.access.redhat.com/rhosp13 \
 --output-images-file ${CUSTOM_TEMPLATES}/overcloud-images.yaml \
 -e ${SERVICES_DOCKER}/barbican.yaml \
--e ${SERVICES_DOCKER}/neutron-opendaylight.yaml \
 -e ${SERVICES_DOCKER}/neutron-ovn-dvr-ha.yaml \
 -e ${SERVICES_DOCKER}/octavia.yaml \
 -e ${SERVICES_DOCKER}/sensu-client.yaml
@@ -20,7 +19,6 @@ openstack overcloud container image prepare \
 --namespace 192.168.101.101:8787/rhosp13 \
 --output-env-file ${CUSTOM_TEMPLATES}/overcloud-images-env.yaml \
 -e ${SERVICES_DOCKER}/barbican.yaml \
--e ${SERVICES_DOCKER}/neutron-opendaylight.yaml \
 -e ${SERVICES_DOCKER}/neutron-ovn-dvr-ha.yaml \
 -e ${SERVICES_DOCKER}/octavia.yaml \
 -e ${SERVICES_DOCKER}/sensu-client.yaml
