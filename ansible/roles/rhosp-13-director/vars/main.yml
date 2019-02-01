@@ -21,4 +21,4 @@ reg_script: files/addRepos-osp13.sh
 # Deployment configuration, based on script
 # Current values are:
 # deploy-isolated-networks.sh | deploy-ovn.sh  
-deploy_script: deploy-isolated-networks.sh
+deploy_script: deploy-ovn.sh
