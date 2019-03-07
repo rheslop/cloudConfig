@@ -131,6 +131,7 @@ qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
 --network network=Provisioning,mac=52:54:81:01:a0:0${i} \
 --network network=Tenant,mac=52:54:82:01:a0:0${i} \
 --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
+--network network=net-br0,mac=52:54:FF:01:a0:0${i} \
 --network network=Storage,mac=52:54:84:01:a0:0${i} \
 --network network=StorageCluster,mac=52:54:85:01:a0:0${i} \
 --name compute-${i} \
