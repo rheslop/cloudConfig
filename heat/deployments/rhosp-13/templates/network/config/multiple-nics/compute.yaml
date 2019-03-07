@@ -125,14 +125,31 @@ resources:
                 addresses:
                   - ip_netmask:
                       get_param: InternalApiIpSubnet
+              - type: ovs_bridge
+                name: bridge_name
+                dns_servers:
+                  get_param: DnsServers
+                use_dhcp: false
+                address:
+                  - ip_netmask:
+                      get_param: ExternalIpSubnet
+                routes:
+                  - default: true
+                    next_hop:
+                      get_param: ExternalInterfaceDefaultRoute
+                members:
+                  - type: interface
+                    name: nic4
+                    primary: true
+                    use_dhcp: false
               - type: interface
-                name: nic4
+                name: nic5
                 use_dhcp: false
                 addresses:
                   - ip_netmask:
                       get_param: StorageIpSubnet
               - type: interface
-                name: nic5
+                name: nic6
                 use_dhcp: false
                 addresses:
                   - ip_netmask:
