@@ -19,7 +19,7 @@ parameter_defaults:
   StorageAllocationPools: [{'start': '192.168.104.50', 'end': '192.168.104.99'}]
   StorageMgmtAllocationPools: [{'start': '192.168.105.50', 'end': '192.168.105.99'}]
   TenantAllocationPools: [{'start': '192.168.102.50', 'end': '192.168.102.99'}]
-  ExternalAllocationPools: [{'start': '192.168.0.110', 'end': '192.168.0.120'}]
+  ExternalAllocationPools: [{'start': '192.168.0.116', 'end': '192.168.0.120'}]
   ExternalInterfaceDefaultRoute: 192.168.0.1
   #
   DnsServers: ["8.8.8.8","8.8.4.4"]
