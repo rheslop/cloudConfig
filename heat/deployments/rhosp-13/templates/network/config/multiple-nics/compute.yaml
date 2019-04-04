@@ -130,7 +130,7 @@ resources:
                 dns_servers:
                   get_param: DnsServers
                 use_dhcp: false
-                address:
+                addresses:
                   - ip_netmask:
                       get_param: ExternalIpSubnet
                 routes:
