@@ -1,5 +1,5 @@
 SERVICES_DOCKER=/usr/share/openstack-tripleo-heat-templates/environments/services-docker
-CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-13/templates
+CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-13/templates-ovs-ml2
 DNS=8.8.8.8
 
 source /home/stack/stackrc
