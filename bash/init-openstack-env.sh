@@ -3,6 +3,7 @@
 CREATE_VIRTUAL_NETWORKS=no
 CREATE_VMS=yes
 CREATE_VIRTUAL_BMCS=no
+COMPUTES_ON_EXTERNAL=no
 
 # Define virtual networks
 
@@ -124,25 +125,50 @@ done
 
 for i in 1 2; do
 
-qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
+  if [ ${COMPUTES_ON_EXTERNAL} == "yes" ]; then
+  
+    qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
 
-/usr/bin/virt-install \
---disk path=/var/lib/libvirt/images/compute-${i}.qcow2 \
---network network=Provisioning,mac=52:54:81:01:a0:0${i} \
---network network=Tenant,mac=52:54:82:01:a0:0${i} \
---network network=InternalApi,mac=52:54:83:01:a0:0${i} \
---network network=net-br0,mac=52:54:FF:01:a0:0${i} \
---network network=Storage,mac=52:54:84:01:a0:0${i} \
---network network=StorageCluster,mac=52:54:85:01:a0:0${i} \
---name compute-${i} \
---cpu host,+svm \
---vcpus 2 \
---ram 8192 \
---noautoconsole \
---os-type=linux \
---os-variant=rhel7 \
---dry-run --print-xml > /root/files/vms/compute-${i}.xml
-virsh define --file /root/files/vms/compute-${i}.xml
+    /usr/bin/virt-install \
+    --disk path=/var/lib/libvirt/images/compute-${i}.qcow2 \
+    --network network=Provisioning,mac=52:54:81:01:a0:0${i} \
+    --network network=Tenant,mac=52:54:82:01:a0:0${i} \
+    --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
+    --network network=net-br0,mac=52:54:FF:01:a0:0${i} \
+    --network network=Storage,mac=52:54:84:01:a0:0${i} \
+    --network network=StorageCluster,mac=52:54:85:01:a0:0${i} \
+    --name compute-${i} \
+    --cpu host,+svm \
+    --vcpus 2 \
+    --ram 8192 \
+    --noautoconsole \
+    --os-type=linux \
+    --os-variant=rhel7 \
+    --dry-run --print-xml > /root/files/vms/compute-${i}.xml
+    virsh define --file /root/files/vms/compute-${i}.xml
+
+  else
+
+    qemu-img create -f qcow2 /var/lib/libvirt/images/compute-${i}.qcow2 120G
+
+    /usr/bin/virt-install \
+    --disk path=/var/lib/libvirt/images/compute-${i}.qcow2 \
+    --network network=Provisioning,mac=52:54:81:01:a0:0${i} \
+    --network network=Tenant,mac=52:54:82:01:a0:0${i} \
+    --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
+    --network network=Storage,mac=52:54:84:01:a0:0${i} \
+    --network network=StorageCluster,mac=52:54:85:01:a0:0${i} \
+    --name compute-${i} \
+    --cpu host,+svm \
+    --vcpus 2 \
+    --ram 8192 \
+    --noautoconsole \
+    --os-type=linux \
+    --os-variant=rhel7 \
+    --dry-run --print-xml > /root/files/vms/compute-${i}.xml
+    virsh define --file /root/files/vms/compute-${i}.xml
+
+  fi
 
 done
 }
