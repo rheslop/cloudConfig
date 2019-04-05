@@ -136,7 +136,6 @@ for i in 1 2; do
     --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
     --network network=net-br0,mac=52:54:FF:01:a0:0${i} \
     --network network=Storage,mac=52:54:84:01:a0:0${i} \
-    --network network=StorageCluster,mac=52:54:85:01:a0:0${i} \
     --name compute-${i} \
     --cpu host,+svm \
     --vcpus 2 \
@@ -157,7 +156,6 @@ for i in 1 2; do
     --network network=Tenant,mac=52:54:82:01:a0:0${i} \
     --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
     --network network=Storage,mac=52:54:84:01:a0:0${i} \
-    --network network=StorageCluster,mac=52:54:85:01:a0:0${i} \
     --name compute-${i} \
     --cpu host,+svm \
     --vcpus 2 \

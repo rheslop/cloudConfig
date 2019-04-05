@@ -131,12 +131,6 @@ resources:
                 addresses:
                   - ip_netmask:
                       get_param: StorageIpSubnet
-              - type: interface
-                name: nic5
-                use_dhcp: false
-                addresses:
-                  - ip_netmask:
-                      get_param: StorageMgmtIpSubnet
 
 outputs:
   OS::stack_id:
