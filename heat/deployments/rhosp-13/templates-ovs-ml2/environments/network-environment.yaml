@@ -1,0 +1,31 @@
+resource_registry:
+  OS::TripleO::Compute::Net::SoftwareConfig:
+    ../network/config/multiple-nics/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig:
+    ../network/config/multiple-nics/controller.yaml
+
+parameter_defaults:
+  ControlPlaneIp: 192.168.101.101
+  ControlPlaneSubnetCidr: '24'
+  ControlPlaneDefaultRoute: 192.168.101.101
+  EC2MetadataIp: 192.168.101.101
+  TenantNetCidr: 192.168.102.0/24
+  InternalApiNetCidr: 192.168.103.0/24
+  StorageNetCidr: 192.168.104.0/24
+  StorageMgmtNetCidr: 192.168.105.0/24
+  ExternalNetCidr: 192.168.0.0/24
+  #
+  InternalApiAllocationPools: [{'start': '192.168.103.50', 'end': '192.168.103.99'}]
+  StorageAllocationPools: [{'start': '192.168.104.50', 'end': '192.168.104.99'}]
+  StorageMgmtAllocationPools: [{'start': '192.168.105.50', 'end': '192.168.105.99'}]
+  TenantAllocationPools: [{'start': '192.168.102.50', 'end': '192.168.102.99'}]
+  ExternalAllocationPools: [{'start': '192.168.0.116', 'end': '192.168.0.120'}]
+  ExternalInterfaceDefaultRoute: 192.168.0.1
+  #
+  DnsServers: ["8.8.8.8","8.8.4.4"]
+  NeutronExternalNetworkBridge: "''"
+  NeutronNetworkType: 'vxlan,vlan'
+  NeutronTunnelTypes: 'vxlan'
+  NeutronBridgeMappings: 'datacentre:br-ex'
+  NeutronNetworkVLANRanges: 'datacentre:1:1000'
+  BondInterfaceOvsOptions: 'bond_mode=active-backup'
