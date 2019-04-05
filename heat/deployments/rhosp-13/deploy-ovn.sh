@@ -7,7 +7,6 @@ time openstack overcloud deploy --templates \
 -e ${CUSTOM_TEMPLATES}/overcloud-images-env.yaml \
 -e ${CUSTOM_TEMPLATES}/hostname-map.yaml \
 -e ${CUSTOM_TEMPLATES}/environments/network-environment.yaml \
--e ${TEMPLATES_HOME}/environments/network-isolation.yaml \
 -e ${CUSTOM_TEMPLATES}/environments/ip-layout.yaml \
 -e ${TEMPLATES_HOME}/environments/services-docker/neutron-ovn-dvr-ha.yaml \
 -e ${CUSTOM_TEMPLATES}/sundry.yaml \
