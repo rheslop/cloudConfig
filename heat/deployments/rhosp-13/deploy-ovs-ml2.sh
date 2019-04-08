@@ -6,6 +6,7 @@ time openstack overcloud deploy --templates \
 --control-scale 3 --compute-scale 2 \
 -e ${CUSTOM_TEMPLATES}/overcloud-images-env.yaml \
 -e ${CUSTOM_TEMPLATES}/hostname-map.yaml \
+-e ${TEMPLATES_HOME}/environments/network-isolation.yaml \
 -e ${CUSTOM_TEMPLATES}/environments/network-environment.yaml \
 -e ${CUSTOM_TEMPLATES}/environments/ip-layout.yaml \
 -e ${CUSTOM_TEMPLATES}/sundry.yaml \
