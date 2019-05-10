@@ -2,8 +2,6 @@ CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-13/templates-ovs
 TEMPLATES_HOME=/usr/share/openstack-tripleo-heat-templates
 
 time openstack overcloud deploy --templates \
---control-flavor baremetal --compute-flavor baremetal \
---control-scale 3 --compute-scale 2 \
 -e ${CUSTOM_TEMPLATES}/overcloud-images-env.yaml \
 -e ${CUSTOM_TEMPLATES}/hostname-map.yaml \
 -e ${TEMPLATES_HOME}/environments/network-isolation.yaml \

@@ -5,6 +5,11 @@ resource_registry:
     ../network/config/multiple-nics/controller.yaml
 
 parameter_defaults:
+  OvercloudComputeFlavor: baremetal
+  OvercloudControllerFlovor: baremetal
+  ComputeCount: 2
+  ControllerCount: 3
+  #
   ControlPlaneIp: 192.168.101.101
   ControlPlaneSubnetCidr: '24'
   ControlPlaneDefaultRoute: 192.168.101.101
