@@ -4,7 +4,7 @@
 # exit 1
 
 CLOUDCONFIG=/root/cloudConfig
-TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-server-7.5-x86_64-kvm.qcow2
+TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-server-7.6-x86_64-kvm.qcow2
 NAME=undercloud
 DISK=/var/lib/libvirt/images/${NAME}.qcow2
 HOST_NAME=director.servermain.local
