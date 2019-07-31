@@ -1,14 +1,13 @@
----
 - name: Increasing timeouts
   ini_file:
     path: "{{ item }}"
     section: DEFAULT
     option: rpc_response_timeout
     value: 600 
-    with_items:
-      - /etc/ironic/ironic.conf
-      - /etc/neutron/neutron.conf
-      - /etc/nova/nova.conf
+  with_items:
+    - /etc/ironic/ironic.conf
+    - /etc/neutron/neutron.conf
+    - /etc/nova/nova.conf
 
 - name: Increasing ipmi min_command_interval
   ini_file:

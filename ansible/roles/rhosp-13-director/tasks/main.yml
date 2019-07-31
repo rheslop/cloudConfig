@@ -32,7 +32,6 @@
     state: directory
     owner: stack
     group: stack
-  setype: user_home_t
 
 - name: create /etc/sudoers.d/stack
   copy:

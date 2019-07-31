@@ -95,7 +95,7 @@ rm -rf /tmp/StorageCluster.xml
 
 function DEFINE_VMS {
 
-# Controller (12G memory, 2 vcpus, 80 GiB HDD)
+# Controller (8G memory, 2 vcpus, 80 GiB HDD)
 #
 
 for i in 1 2 3; do
@@ -111,7 +111,7 @@ qemu-img create -f qcow2 /var/lib/libvirt/images/controller-${i}.qcow2 80G
 --network network=StorageCluster,mac=52:54:85:00:a0:0${i} \
 --name controller-${i} \
 --vcpus 2 \
---ram 12288 \
+--ram 8192 \
 --noautoconsole \
 --os-type=linux \
 --os-variant=rhel7 \

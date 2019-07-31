@@ -56,8 +56,8 @@ virt-customize -a $DISK \
 --selinux-relabel
 
 /usr/bin/virt-install --name ${NAME} \
---memory=12288 \
---vcpus=2 \
+--memory=16384 \
+--vcpus=4 \
 --disk path=$DISK \
 --import \
 --network network=Provisioning \
