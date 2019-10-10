@@ -4,7 +4,7 @@ DNS=8.8.8.8
 openstack subnet set --no-dns-nameservers --dns-nameserver $DNS $SUBNET
 
 SERVICES_DOCKER=/usr/share/openstack-tripleo-heat-templates/environments/services-docker
-CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-13/templates-ovs-ml2
+CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-14/templates-ovs-ml2
 
 openstack overcloud container image prepare \
 --namespace registry.access.redhat.com/rhosp14 \
