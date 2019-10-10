@@ -1,0 +1,48 @@
+resource_registry:
+  OS::TripleO::Controller::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
+  OS::TripleO::Controller::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Controller::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt_from_pool.yaml
+  OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+
+  OS::TripleO::Compute::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
+  OS::TripleO::Compute::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Compute::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Compute::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Compute::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+
+parameter_defaults:
+  ControllerIPs:
+    external:
+    - 192.168.0.111
+    - 192.168.0.112
+    - 192.168.0.113
+    tenant:
+    - 192.168.102.111
+    - 192.168.102.112
+    - 192.168.102.113
+    internal_api:
+    - 192.168.103.111
+    - 192.168.103.112
+    - 192.168.103.113
+    storage:
+    - 192.168.104.111
+    - 192.168.104.112
+    - 192.168.104.113
+    storage_mgmt:
+    - 192.168.105.111
+    - 192.168.105.112
+    - 192.168.105.113
+  NovaComputeIPs:
+    external:
+    - 192.168.0.114
+    - 192.168.0.115
+    tenant:
+    - 192.168.102.114
+    - 192.168.102.115
+    internal_api:
+    - 192.168.103.114
+    - 192.168.103.115
+    storage:
+    - 192.168.104.114
+    - 192.168.104.115
