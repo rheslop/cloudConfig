@@ -114,8 +114,8 @@
   become: yes
   become_user: stack
   with_items:
-    - /usr/share/rhosp-director-images/overcloud-full-latest-13.0.tar
-    - /usr/share/rhosp-director-images/ironic-python-agent-latest-13.0.tar
+    - /usr/share/rhosp-director-images/overcloud-full-latest-14.0.tar
+    - /usr/share/rhosp-director-images/ironic-python-agent-latest-14.0.tar
 
 - name: Uploading images to glance
   shell: "source /home/stack/stackrc && openstack overcloud image upload --image-path /home/stack/images/"
@@ -157,7 +157,7 @@
 - name: Copy deploy script
   copy:
     dest: /home/stack/deploy.sh
-    src: /home/stack/cloudConfig/heat/deployments/rhosp-13/{{ deploy_script }}
+    src: /home/stack/cloudConfig/heat/deployments/rhosp-14/{{ deploy_script }}
     remote_src: yes
     mode: 0755
   become: yes

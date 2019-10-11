@@ -1,6 +1,7 @@
 shortname: director
 domainname: servermain.local
 stackhome: /home/stack
+custom_templates: /home/stack/cloudConfig/heat/deployments/rhosp-14/templates-ovs-ml2
 
 # Define the names of the source files that will be used to create
 # to the destination system files instackenv.json and undercloud.conf
