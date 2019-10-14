@@ -1,4 +1,4 @@
-CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-13/templates-ovs-ml2
+CUSTOM_TEMPLATES=/home/stack/cloudConfig/heat/deployments/rhosp-14/templates-ovs-ml2
 TEMPLATES_HOME=/usr/share/openstack-tripleo-heat-templates
 
 time openstack overcloud deploy --templates \

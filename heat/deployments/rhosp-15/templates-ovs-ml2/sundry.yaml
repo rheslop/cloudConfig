@@ -1,4 +1,4 @@
 parameter_defaults:
-  CloudName: rhosp-14-lab
+  CloudName: rhosp-15-lab
   TimeZone: 'US/Central'
 

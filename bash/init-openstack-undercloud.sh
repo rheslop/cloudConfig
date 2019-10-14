@@ -3,8 +3,9 @@
 # echo "Do not run until hostname and interfaces are configured."
 # exit 1
 
+# TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-server-7.7-x86_64-kvm.qcow2
+TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-8.0-update-1-x86_64-kvm.qcow2
 CLOUDCONFIG=/root/cloudConfig
-TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-server-7.7-x86_64-kvm.qcow2
 NAME=undercloud
 DISK=/var/lib/libvirt/images/${NAME}.qcow2
 HOST_NAME=director.servermain.local
