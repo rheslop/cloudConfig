@@ -1,0 +1,12 @@
+nova::wsgi::apache::workers: 8
+nova::wsgi::apache::threads: 1
+keystone::wsgi::apache::workers: 16
+keystone::wsgi::apache::threads: 1
+heat::engine::num_engine_workers: 2
+heat::config::heat_config:
+    DEFAULT/executor_thread_pool_size:
+        value: 20
+
+
+
+## https://access.redhat.com/articles/3597351
