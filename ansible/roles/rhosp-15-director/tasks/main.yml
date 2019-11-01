@@ -74,7 +74,7 @@
     state: present
   with_items:
     - crudini
-    - python-tripleoclient
+    - python3-tripleoclient
     - rhosp-director-images
     - rhosp-director-images-ipa
     - tmux
