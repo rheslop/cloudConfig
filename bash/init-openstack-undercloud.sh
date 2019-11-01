@@ -22,7 +22,6 @@ ONBOOT="yes"
 TYPE="Ethernet"
 IPADDR="192.168.101.101"
 NETMASK="255.255.255.0"
-GATEWAY="192.168.101.254"
 EOF
 
 # eth1 configuration
