@@ -4,7 +4,7 @@
 # exit 1
 
 # TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-server-7.7-x86_64-kvm.qcow2
-TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-8.0-update-1-x86_64-kvm.qcow2
+TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-8.1-x86_64-kvm.qcow2
 CLOUDCONFIG=/root/cloudConfig
 NAME=undercloud
 DISK=/var/lib/libvirt/images/${NAME}.qcow2

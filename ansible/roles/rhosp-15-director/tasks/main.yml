@@ -163,10 +163,10 @@
   become: yes
   become_user: stack
 
-- name: Prep Overcloud Container registry
-  script: ../files/overcloud-container-prep.sh
-  become: yes
-  become_user: stack
+# - name: Prep Overcloud Container registry
+#  script: ../files/overcloud-container-prep.sh
+#  become: yes
+#  become_user: stack
 
 - name: Set nodes to available
   shell: "source /home/stack/stackrc && for i in $(openstack baremetal node list -c UUID | awk '{print $2}' | grep -); do openstack baremetal node provide ${i} ; done"
