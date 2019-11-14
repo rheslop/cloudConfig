@@ -2,7 +2,7 @@
   vip: true
   name_lower: storage
   ip_subnet: '192.168.104.0/24'
-  allocation_pools: [{'start': '192.168.104.50', 'end': '192.168.104.99']
+  allocation_pools: [{'start': '192.168.104.50', 'end': '192.168.104.99'}]
   mtu: 1500
 - name: StorageMgmt
   name_lower: storage_mgmt
