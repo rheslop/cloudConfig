@@ -6,9 +6,6 @@ resource_registry:
 
 parameter_defaults:
   DnsServers: ["8.8.8.8","8.8.4.4"]
-  NeutronExternalNetworkBridge: "''"
-  NeutronNetworkType: 'geneve,vlan,flat'
-  NeutronTunnelTypes: 'geneve'
-  NeutronBridgeMappings: 'datacentre:br-ex'
+  NeutronNetworkType: 'geneve,vlan'
   NeutronNetworkVLANRanges: 'datacentre:1:1000'
   BondInterfaceOvsOptions: 'bond_mode=active-backup'

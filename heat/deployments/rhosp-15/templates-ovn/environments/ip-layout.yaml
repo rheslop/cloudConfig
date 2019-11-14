@@ -33,7 +33,7 @@ parameter_defaults:
     - 192.168.105.111
     - 192.168.105.112
     - 192.168.105.113
-  NovaComputeIPs:
+  ComputeIPs:
     external:
     - 192.168.0.114
     - 192.168.0.115
