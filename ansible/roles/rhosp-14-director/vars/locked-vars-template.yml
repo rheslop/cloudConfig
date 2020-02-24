@@ -1,7 +1,0 @@
-# After filling in these variables, copy locked-vars-template.yml to
-# locked-vars.yml. Then, lock with: ansible-vault encrypt locked-vars.yml
-
-stack_pass:
-rhn_username:
-rhn_password:
-redhat_pool:
