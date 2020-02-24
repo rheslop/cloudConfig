@@ -1,0 +1,11 @@
+resource_registry:
+  OS::TripleO::Compute::Net::SoftwareConfig:
+    ../network/config/multiple-nics/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig:
+    ../network/config/multiple-nics/controller.yaml
+
+parameter_defaults:
+  DnsServers: ["8.8.8.8","8.8.4.4"]
+  NeutronNetworkType: 'geneve,vlan'
+  NeutronNetworkVLANRanges: 'datacentre:1:1000'
+  BondInterfaceOvsOptions: 'bond_mode=active-backup'
