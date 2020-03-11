@@ -7,7 +7,7 @@ read -p "subscription-manager pool: " SUBMAN_POOL
 
 }
 
-export function RUN_AS_STACK {
+function RUN_AS_STACK {
 
 if [ -z ${SUBMAN_USER} ]; then
 	read -p "subscription-manager username: " SUBMAN_USER
@@ -17,21 +17,21 @@ if [ -z ${SUBMAN_PASS} ]; then
 	read -s -p "subscription-manager password: " SUMAN_PASS
 fi
 
-su stack -c \
-"mkdir /home/stack/images; mkdir /home/stack/templates"
+su --command 'mkdir /home/stack/images; mkdir /home/stack/templates
 
 openstack tripleo container image prepare default \
 --local-push-destination \
 --output-env-file /home/stack/containers-prepare-parameter.yaml
 
-echo -e "  ContainerImageRegistryCredentials:\n    registry.redhat.io:\n      ${SUBMAN_USER}:${SUBMAN_PASS}\n" | tee -a /home/stack/containers-prepare-parameter.yaml
+echo -e "  ContainerImageRegistryCredentials:\n    registry.redhat.io:\n      ${SUBMAN_USER}:${SUBMAN_PASS}\n" \
+| tee -a /home/stack/containers-prepare-parameter.yaml
 
 for i in \
 /usr/share/rhosp-director-images/overcloud-full-latest-16.0.tar \
 /usr/share/rhosp-director-images/ironic-python-agent-latest-16.0.tar
 do tar -xvf ${i} --directory /home/stack/images; done
 
-cat <EOF >> undercloud.conf
+cat << EOF > /home/stack/undercloud.conf
 [DEFAULT]
 local_ip=192.168.101.101/24
 undercloud_public_host = 192.168.101.102
@@ -49,7 +49,7 @@ gateway = 192.168.101.101
 dhcp_start = 192.168.101.10
 dhcp_end = 192.168.101.20
 masquerade = true
-EOF
+EOF' stack
 
 # openstack undercloud install
 
@@ -76,12 +76,11 @@ subscription-manager repos \
 --enable=openstack-16-for-rhel-8-x86_64-rpms \
 --enable=fast-datapath-for-rhel-8-x86_64-rpms
 
-dnf install -y python3-tripleoclient rhosp-director-images
+dnf install -y python3-tripleoclient rhosp-director-images git
 dnf -y update
 }
 
-# INTERROGATION
+INTERROGATION
 # CONFIGURE_STACK
-# CONFIGURE_HOST
-
-su stack -c "bash -c RUN_AS_STACK"
+CONFIGURE_HOST
+RUN_AS_STACK
