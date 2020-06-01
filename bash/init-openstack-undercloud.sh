@@ -3,14 +3,14 @@
 # echo "Do not run until hostname and interfaces are configured."
 # exit 1
 
-# TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-server-7.7-x86_64-kvm.qcow2
-# TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-8.0-update-1-x86_64-kvm.qcow2
-TEMPLATE=/var/lib/libvirt/images/vanilla/rhel-8.1-x86_64-kvm.qcow2
+TEMPLATE=/var/lib/libvirt/images/templates/rhel-server-7.8-x86_64-kvm.qcow2
+# TEMPLATE=/var/lib/libvirt/images/templates/rhel-8.0-update-1-x86_64-kvm.qcow2
+# TEMPLATE=/var/lib/libvirt/images/templates/rhel-8.1-x86_64-kvm.qcow2
 
-CLOUDCONFIG=/root/cloudConfig
+CLOUDCONFIG=/home/rheslop/repositories/git/rheslop/cloudConfig
 NAME=undercloud
 DISK=/var/lib/libvirt/images/${NAME}.qcow2
-HOST_NAME=director.servermain.local
+HOST_NAME=director.controlstation.local
 
 if [ ! -f $TEMPLATE ]; then
 echo "$TEMPLATE NOT FOUND." ; echo "exiting." ; exit 1
@@ -32,14 +32,14 @@ DEVICE="eth1"
 BOOTPROTO="none"
 ONBOOT="yes"
 TYPE="Ethernet"
-IPADDR="192.168.0.101"
+IPADDR="192.168.81.220"
 NETMASK="255.255.255.0"
-GATEWAY="192.168.0.1"
+GATEWAY="192.168.81.1"
 DNS1="8.8.8.8"
 DNS2="1.1.1.1"
 EOF
 
-qemu-img create -f qcow2 ${DISK} 80G
+qemu-img create -f qcow2 ${DISK} 100G
 export LIBGUESTFS_BACKEND=direct
 
 virt-resize --expand /dev/sda1 ${TEMPLATE} ${DISK}
@@ -61,7 +61,7 @@ virt-customize -a $DISK \
 --disk path=$DISK \
 --import \
 --network network=Provisioning \
---network network=net-br0 \
+--network network=ootpa-2 \
 --os-type=linux \
 --os-variant=rhel7 \
 --nographics \
@@ -81,4 +81,4 @@ echo ""
 
 cd ${CLOUDCONFIG}/ansible
 if [ -f /root/.ssh/known_hosts ]; then ssh-keygen -R undercloud -f ~/.ssh/known_hosts; fi
-ansible-playbook --ask-vault-pass ${CLOUDCONFIG}/ansible/launchUndercloud.yml
+# ansible-playbook --ask-vault-pass ${CLOUDCONFIG}/ansible/launchUndercloud.yml

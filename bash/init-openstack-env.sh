@@ -1,26 +1,26 @@
 #!/bin/bash
 
-CREATE_VIRTUAL_NETWORKS=no
+CREATE_VIRTUAL_NETWORKS=yes
 CREATE_VMS=yes
-CREATE_VIRTUAL_BMCS=no
-COMPUTES_ON_EXTERNAL=no
+CREATE_VIRTUAL_BMCS=yes
+COMPUTES_ON_EXTERNAL=yes
 
 # Define virtual networks
 
 function DEFINE_VIRTUAL_NETWORKS {
 
-cat > /tmp/net-br0.xml << EOF
-<network>
-  <name>net-br0</name>
-  <forward mode='bridge'/>
-  <bridge name='br0'/>
-</network>
-EOF
+# cat > /tmp/net-br0.xml << EOF
+# <network>
+#   <name>net-br0</name>
+#   <forward mode='bridge'/>
+#   <bridge name='br0'/>
+# </network>
+# EOF
 
-virsh net-define /tmp/net-br0.xml
-virsh net-start net-br0
-virsh net-autostart net-br0
-rm -rf /tmp/net-br0.xml
+# virsh net-define /tmp/net-br0.xml
+# virsh net-start net-br0
+# virsh net-autostart net-br0
+# rm -rf /tmp/net-br0.xml
 
 cat > /tmp/Provisioning.xml << EOF
 <network>
@@ -95,7 +95,7 @@ rm -rf /tmp/StorageCluster.xml
 
 function DEFINE_VMS {
 
-# Controller (8G memory, 2 vcpus, 80 GiB HDD)
+# Controller (16G memory, 2 vcpus, 80 GiB HDD)
 #
 
 for i in 1 2 3; do
@@ -106,17 +106,16 @@ qemu-img create -f qcow2 /var/lib/libvirt/images/controller-${i}.qcow2 80G
 --network network=Provisioning,mac=52:54:81:00:a0:0${i} \
 --network network=Tenant,mac=52:54:82:00:a0:0${i} \
 --network network=InternalApi,mac=52:54:83:00:a0:0${i} \
---network network=net-br0,mac=52:54:FF:00:a0:0${i} \
+--network network=ootpa-2,mac=52:54:FF:00:a0:0${i} \
 --network network=Storage,mac=52:54:84:00:a0:0${i} \
 --network network=StorageCluster,mac=52:54:85:00:a0:0${i} \
 --name controller-${i} \
 --vcpus 2 \
---ram 8192 \
+--ram 16384 \
 --noautoconsole \
 --os-type=linux \
---os-variant=rhel7 \
---dry-run --print-xml > /root/files/vms/controller-${i}.xml
-virsh define --file /root/files/vms/controller-${i}.xml
+--dry-run --print-xml > /tmp/controller-${i}.xml
+virsh define --file /tmp/controller-${i}.xml
 
 done
 
@@ -134,17 +133,17 @@ for i in 1 2; do
     --network network=Provisioning,mac=52:54:81:01:a0:0${i} \
     --network network=Tenant,mac=52:54:82:01:a0:0${i} \
     --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
-    --network network=net-br0,mac=52:54:FF:01:a0:0${i} \
+    --network network=ootpa-2,mac=52:54:FF:01:a0:0${i} \
     --network network=Storage,mac=52:54:84:01:a0:0${i} \
     --name compute-${i} \
-    --cpu host,+svm \
+    --cpu host,+vmx \
     --vcpus 2 \
     --ram 8192 \
     --noautoconsole \
     --os-type=linux \
     --os-variant=rhel7 \
-    --dry-run --print-xml > /root/files/vms/compute-${i}.xml
-    virsh define --file /root/files/vms/compute-${i}.xml
+    --dry-run --print-xml > /tmp/compute-${i}.xml
+    virsh define --file /tmp/compute-${i}.xml
 
   else
 
@@ -157,14 +156,14 @@ for i in 1 2; do
     --network network=InternalApi,mac=52:54:83:01:a0:0${i} \
     --network network=Storage,mac=52:54:84:01:a0:0${i} \
     --name compute-${i} \
-    --cpu host,+svm \
+    --cpu host,+vmx \
     --vcpus 2 \
     --ram 8192 \
     --noautoconsole \
     --os-type=linux \
     --os-variant=rhel7 \
-    --dry-run --print-xml > /root/files/vms/compute-${i}.xml
-    virsh define --file /root/files/vms/compute-${i}.xml
+    --dry-run --print-xml > /tmp/compute-${i}.xml
+    virsh define --file /tmp/compute-${i}.xml
 
   fi
 
@@ -175,8 +174,8 @@ function CREATE_VBMCS {
 
 # Create virtual BMCs
 
-sudo yum install https://www.rdoproject.org/repos/rdo-release.rpm
-sudo yum install -y python-virtualbmc
+# sudo yum install https://www.rdoproject.org/repos/rdo-release.rpm
+# sudo yum install -y python-virtualbmc
 
 vbmc add compute-1 --port 6231 --username admin --password password
 vbmc add compute-2 --port 6232 --username admin --password password
@@ -188,7 +187,6 @@ for i in {1..3}; do vbmc start controller-${i}; done
 for i in {1..2}; do vbmc start compute-${i}; done
 
 cat << EOF > ~/openstack-ipmi.xml
-<?xml version"1.0" encoding="utf-8"?>
 <service>
   <short>IPMI control</short>
   <description>IPMI ports for openstack domains.</description>
