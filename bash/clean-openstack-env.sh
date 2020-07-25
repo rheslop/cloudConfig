@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+function DELETE_OVERCLOUD {
 for i in {1..3}; do
 
   if virsh list --all | grep controller-${i}; then
@@ -31,7 +33,9 @@ for i in 1 2; do
   fi
 
 done
+}
 
+function DELETE_UNDERCLOUD {
 if virsh list --all | grep undercloud; then
   if virsh list | grep undercloud; then
     virsh destroy undercloud
@@ -43,4 +47,24 @@ if virsh list --all | grep undercloud; then
 else
   echo "undercloud not found."
 fi
+}
 
+
+function CLEAN_OVERCLOUD_DISKS {
+for i in {1..3}; do
+
+  if virsh list --all | grep controller-${i}; then
+    if virsh list | grep controller-${i}; then
+      virsh destroy controller-${i}
+    else
+      echo "controller-${i} not running."
+    fi
+    rm /var/lib/libvirt/images/controller-${i}.qcow2
+  fi
+done
+}
+
+
+DELETE_OVERCLOUD
+DELETE_UNDERCLOUD
+# CLEAN_OVERCLOUD_DISKS

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-CREATE_VIRTUAL_NETWORKS=yes
+CREATE_VIRTUAL_NETWORKS=no
 CREATE_VMS=yes
-CREATE_VIRTUAL_BMCS=yes
+CREATE_VIRTUAL_BMCS=no
 COMPUTES_ON_EXTERNAL=yes
 
 # Define virtual networks
@@ -26,7 +26,7 @@ cat > /tmp/Provisioning.xml << EOF
 <network>
   <name>Provisioning</name>
   <domain name='Provisioning' />
-  <ip address='192.168.101.1' netmask='255.255.255.0'>
+  <ip address='10.94.101.1' netmask='255.255.255.0'>
   </ip>
 </network>
 EOF
@@ -40,7 +40,7 @@ cat > /tmp/Tenant.xml << EOF
 <network>
   <name>Tenant</name>
   <domain name='Tenant' />
-  <ip address='192.168.102.1' netmask='255.255.255.0'>
+  <ip address='10.94.102.1' netmask='255.255.255.0'>
   </ip>
 </network>
 EOF
@@ -54,7 +54,7 @@ cat > /tmp/InternalApi.xml << EOF
 <network>
   <name>InternalApi</name>
   <domain name='InternalApi' />
-  <ip address='192.168.103.1' netmask='255.255.255.0'>
+  <ip address='10.94.103.1' netmask='255.255.255.0'>
   </ip>
 </network>
 EOF
@@ -68,7 +68,7 @@ cat > /tmp/Storage.xml << EOF
 <network>
   <name>Storage</name>
   <domain name='Storage' />
-  <ip address='192.168.104.1' netmask='255.255.255.0'>
+  <ip address='10.94.104.1' netmask='255.255.255.0'>
   </ip>
 </network>
 EOF
@@ -82,7 +82,7 @@ cat > /tmp/StorageCluster.xml << EOF
 <network>
   <name>StorageCluster</name>
   <domain name='StorageCluster' />
-  <ip address='192.168.105.1' netmask='255.255.255.0'>
+  <ip address='10.94.105.1' netmask='255.255.255.0'>
   </ip>
 </network>
 EOF
